@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using System.Runtime.InteropServices;
 using TriviaAPI.DTOs;
 using TriviaAPI.Models;
 using TriviaAPI.Repositories;
@@ -24,6 +26,20 @@ namespace TriviaAPI.Controllers
             this.hub = hub;
         }
 
+        [HttpGet("conectar")]
+        public async Task<IActionResult> Clientes()
+        {
+            await hub.Clients.All.SendAsync("Conectado");
+            return Ok();
+        }
+
+        [HttpGet("Iniciar")]
+        public async Task<IActionResult> Iniciar()
+        {
+            //el host de la partida llama a este metodo para que a todos en la partida se les cambie la pantalla a la de juego
+            await hub.Clients.All.SendAsync("iniciar");
+            return Ok();
+        }
 
 
         [HttpGet("Jugar")]
