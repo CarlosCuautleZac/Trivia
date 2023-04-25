@@ -14,9 +14,21 @@ namespace TriviaAPP.Services
 
         public JuegoHub()
         {
-            connection = new HubConnectionBuilder().WithUrl("https://localhost:7096/triviaHub").Build();      
-            
+            connection = new HubConnectionBuilder().WithUrl("https://localhost:44324/triviaHub").Build();
+
+            connection.On("Conectado", () =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    Application.Current.MainPage.DisplayAlert("uwu", "uwu", "OK");
+                });
+
+            });
+
+             connection.StartAsync();
+
         }
+
 
         public async Task Algo()
         {
@@ -32,7 +44,7 @@ namespace TriviaAPP.Services
 
         public async Task Conectar()
         {
-            await connection.StartAsync();
+            
         }
         public async Task Jugar()
         {
