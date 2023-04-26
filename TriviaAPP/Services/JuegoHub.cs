@@ -4,52 +4,66 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TriviaAPP.Models;
 
 namespace TriviaAPP.Services
 {
     public class JuegoHub
     {
-        HttpClient client = new HttpClient();
+        HttpClient client;
         HubConnection connection;
+        public event Action<string> Conectarse;
+        public event Action Iniciar;
 
         public JuegoHub()
         {
-            connection = new HubConnectionBuilder().WithUrl("https://localhost:44324/triviaHub").Build();
+            client = new HttpClient()
+            {
+                BaseAddress = new Uri("https://rightorangedart42.conveyor.cloud/")
+            };
+
+            connection = new HubConnectionBuilder().WithUrl("https://rightorangedart42.conveyor.cloud/triviaHub").Build();
 
             connection.On("Conectado", () =>
             {
+                Conectarse?.Invoke(connection.ConnectionId);
+            });
+
+
+            connection.On("iniciar", () =>
+            {
+                Iniciar?.Invoke();
+
+            });
+
+            
+
+            connection.On<PreguntaDTO>("recibirpregunta", (preguntaDTO) =>
+            {
+                var p = preguntaDTO;
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    Application.Current.MainPage.DisplayAlert("uwu", "uwu", "OK");
+                    Application.Current.MainPage.DisplayAlert("uwu", "Juego Iniciado", "OK");
                 });
 
             });
 
-             connection.StartAsync();
-
         }
 
-
-        public async Task Algo()
-        {
-            connection.On("Conectado", () =>
-            {
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    Application.Current.MainPage.DisplayAlert("uwu", "uwu", "OK");
-                });
-
-            });
-        }
 
         public async Task Conectar()
         {
-            
+            await connection.StartAsync();
+            Conectarse?.Invoke(connection.ConnectionId);
+            //var result = await client.GetAsync("https://localhost:7096/api/trivia/jugar");
+            //result.EnsureSuccessStatusCode();
         }
         public async Task Jugar()
         {
-            var result = await client.GetAsync("https://localhost:7096/api/trivia/jugar");
+            var result = await client.GetAsync("api/jugar");
             result.EnsureSuccessStatusCode();
         }
+
+
     }
 }
