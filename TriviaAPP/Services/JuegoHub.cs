@@ -15,14 +15,16 @@ namespace TriviaAPP.Services
         public event Action<string> Conectarse;
         public event Action Iniciar;
 
+        string url = "https://fasttanpen59.conveyor.cloud/";
+
         public JuegoHub()
         {
             client = new HttpClient()
             {
-                BaseAddress = new Uri("https://rightorangedart42.conveyor.cloud/")
+                BaseAddress = new Uri(url)
             };
 
-            connection = new HubConnectionBuilder().WithUrl("https://rightorangedart42.conveyor.cloud/triviaHub").Build();
+            connection = new HubConnectionBuilder().WithUrl($"{url}triviaHub").Build();
 
             connection.On("Conectado", () =>
             {

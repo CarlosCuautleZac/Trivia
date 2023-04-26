@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:TriviaAPP.ViewModels" x:DataType="vm:TriviaViewModel"
+             x:Class="TriviaAPP.Views.Inicio"
+             Title="Inicio" Shell.NavBarIsVisible="False">
+    <VerticalStackLayout Margin="10" VerticalOptions="FillAndExpand">
+        <StackLayout Orientation="Horizontal">
+            <Label VerticalOptions="StartAndExpand" Margin="0,100,10,0" HorizontalOptions="Center">Usuario:</Label>
+            <Label Margin="0,100,0,0" Text="{Binding NombreUsuario}"></Label>
+        </StackLayout>
+        
+
+        <Button IsEnabled="{Binding Conection}" Margin="0,200,0,0" Text="Iniciar"></Button>
+
+        
+        <Label HorizontalOptions="Center" FontSize="20" VerticalOptions="End" Margin="0,100,0,0" TextColor="Red" Text="No hay conexion a internet">
+            <!--<Label.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="IsVisible" Value="False"></Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Conection}" Value="False">
+                            <Setter Property="IsVisible" Value="True"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Label.Resources>-->
+
+        </Label>
+    </VerticalStackLayout>
+</ContentPage>

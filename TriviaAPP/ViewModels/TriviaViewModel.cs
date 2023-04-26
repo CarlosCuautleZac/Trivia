@@ -14,8 +14,22 @@ namespace TriviaAPP.ViewModels
 {
     public class TriviaViewModel : INotifyPropertyChanged
     {
+        //Objetos
         JuegoHub hub = new();
-        public string NombreUsuario { get; set; }
+
+        //Comandos
+
+
+        //Propiedades
+        public string NombreUsuario { get; set; } = "Espera";
+        public bool Conection
+        {
+            get
+            {
+                Actualizar(nameof(Conection));
+                return App.Conection;
+            }
+        }
 
         public TriviaViewModel()
         {
@@ -32,12 +46,18 @@ namespace TriviaAPP.ViewModels
         private void Hub_Conectarse(string obj)
         {
             NombreUsuario = obj;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(NombreUsuario));
+            Actualizar(nameof(NombreUsuario));
+            Actualizar();
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NombreUsuario)));
         }
 
         private async void Iniciar()
         {
             await hub.Conectar();
+        }
+        public void Actualizar(string nombre = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(nombre)));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
