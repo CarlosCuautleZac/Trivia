@@ -52,7 +52,7 @@ namespace TriviaAPI.Controllers
             var numeropregunta = random.Next(1, totalpreguntas + 1);
 
             var pregunta = repositoryP.GetbyId(numeropregunta);
-            var respuestas = repositoryR.GetAll().Where(x=>x.Idpregunta==numeropregunta).Select(x=>x.Respuesta).ToList();
+            var respuestas = repositoryR.GetAll().Where(x => x.Idpregunta == numeropregunta).Select(x => x.Respuesta).ToList();
 
             PreguntaDTO preguntaDTO = new PreguntaDTO()
             {
@@ -73,6 +73,8 @@ namespace TriviaAPI.Controllers
 
             return Ok(preguntaDTO);
         }
+
+
 
         IEnumerable<string> RevolverRespuestas(List<string> respuestas)
         {
