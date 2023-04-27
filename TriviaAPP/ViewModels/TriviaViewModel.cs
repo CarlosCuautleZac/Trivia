@@ -9,7 +9,7 @@ using static System.Collections.Specialized.BitVector32;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.Maui.Controls;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-
+using TriviaAPP.Models;
 
 namespace TriviaAPP.ViewModels
 {
@@ -17,6 +17,7 @@ namespace TriviaAPP.ViewModels
     {
         //Objetos
         JuegoHub hub = new();
+        Jugador Jugador = new Jugador();
 
         //Comandos
 
@@ -57,9 +58,10 @@ namespace TriviaAPP.ViewModels
         {
         }
 
-        private void Hub_Conectarse(string obj)
+        private void Hub_Conectarse(Jugador jugador)
         {
-            NombreUsuario = obj;
+            NombreUsuario = jugador.NombreUsuario;
+            Jugador = jugador;
             Actualizar(nameof(NombreUsuario));
             Actualizar();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NombreUsuario)));

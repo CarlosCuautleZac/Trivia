@@ -7,6 +7,7 @@ using TriviaAPI.DTOs;
 using TriviaAPI.Models;
 using TriviaAPI.Repositories;
 using TriviaAPI.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace TriviaAPI.Controllers
 {
@@ -15,20 +16,23 @@ namespace TriviaAPI.Controllers
     public class TriviaController : ControllerBase
     {
         private readonly IHubContext<TriviaHub> hub;
+        private readonly TriviaHub _hub;
         Repository<Preguntas> repositoryP;
         Repository<Respuestaserroneas> repositoryR;
         Random random = new();
+        public List<Jugador> Jugadores = new List<Jugador>();
 
-        public TriviaController(Sistem21TriviaContext context, IHubContext<TriviaHub> hub)
+        public TriviaController(Sistem21TriviaContext context, IHubContext<TriviaHub> hub, TriviaHub _hub)
         {
             repositoryP = new(context);
             repositoryR = new(context);
             this.hub = hub;
+            this._hub = _hub;
         }
 
         [HttpGet("conectar")]
         public async Task<IActionResult> Clientes()
-        {
+        {   
             await hub.Clients.All.SendAsync("Conectado");
             return Ok();
         }

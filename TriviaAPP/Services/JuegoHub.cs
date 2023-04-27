@@ -12,10 +12,14 @@ namespace TriviaAPP.Services
     {
         HttpClient client;
         HubConnection connection;
-        public event Action<string> Conectarse;
+        public event Action<Jugador> Conectarse;
         public event Action Iniciar;
+        Jugador jugador = new();
+        
 
-        string url = "https://nextpurpleapple59.conveyor.cloud/";
+        string url = "https://longaquarock52.conveyor.cloud/";
+        public List<Jugador> Jugadores = new List<Jugador>();
+
 
         public JuegoHub()
         {
@@ -26,10 +30,10 @@ namespace TriviaAPP.Services
 
             connection = new HubConnectionBuilder().WithUrl($"{url}triviaHub").Build();
 
-            connection.On("Conectado", () =>
-            {
-                Conectarse?.Invoke(connection.ConnectionId);
-            });
+            //connection.On("Conectado", () =>
+            //{
+            //    //Conectarse?.Invoke(connection.ConnectionId);
+            //});
 
 
             connection.On("iniciar", () =>
@@ -37,8 +41,6 @@ namespace TriviaAPP.Services
                 Iniciar?.Invoke();
 
             });
-
-            
 
             connection.On<PreguntaDTO>("recibirpregunta", (preguntaDTO) =>
             {
@@ -50,13 +52,31 @@ namespace TriviaAPP.Services
 
             });
 
+            connection.On<List<Jugador>>("NewConnection", (jugadores) =>
+            {
+                var p = jugadores;
+
+            });
+
+            connection.On<List<Jugador>>("DisconnectedConnection", (jugadores) =>
+            {
+                var p = jugadores;
+
+            });
+
+            connection.On<Jugador>("Datos", (j) =>
+            {
+                jugador = j;
+                Conectarse?.Invoke(jugador);
+
+            });
+
         }
 
 
         public async Task Conectar()
         {
             await connection.StartAsync();
-            Conectarse?.Invoke(connection.ConnectionId);
             //var result = await client.GetAsync("https://localhost:7096/api/trivia/jugar");
             //result.EnsureSuccessStatusCode();
         }
