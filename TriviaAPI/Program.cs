@@ -5,6 +5,7 @@ using TriviaAPI.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
+builder.Services.AddTransient<TriviaHub>();
 
 string? cadena = builder.Configuration.GetConnectionString("TriviaConnectionStrings");
 
