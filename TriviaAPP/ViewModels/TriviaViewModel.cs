@@ -10,22 +10,32 @@ using static System.Net.Mime.MediaTypeNames;
 using Microsoft.Maui.Controls;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using TriviaAPP.Models;
+using System.Collections.ObjectModel;
 
 namespace TriviaAPP.ViewModels
 {
     public class TriviaViewModel : INotifyPropertyChanged
     {
-        //Objetos
+        #region objetos
         JuegoHub hub = new();
         Jugador Jugador = new Jugador();
+        #endregion
 
-        //Comandos
+
+        #region comandos
+
+        #endregion
 
 
-        //Propiedades
+        #region propiedades
+
+        public ObservableCollection<Jugador> Jugadores { get; set; } = new();
+
         public string NombreUsuario { get; set; } = "Espera";
 
         public bool Conection { get; set; } = Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+
+
         //public bool Conection
         //{
         //    get
@@ -34,13 +44,39 @@ namespace TriviaAPP.ViewModels
         //        return Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
         //    }
         //}
+        #endregion
+
+        //Constructor
 
         public TriviaViewModel()
         {
             Iniciar();
             hub.Conectarse += Hub_Conectarse;
             hub.Iniciar += Hub_Iniciar;
+            hub.ActualizarLista += Hub_ActualizarLista;
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+        }
+
+        private void Hub_ActualizarLista(List<Jugador> jugadoresactualizados)
+        {
+            ////Verificiar
+            ////Si no estaba, que lo agregue
+            //foreach (var jugador in jugadoresactualizados)
+            //{
+            //    if(!Jugadores.Contains(jugador))
+            //        Jugadores.Add(jugador);
+            //}
+
+            ////Si ya no esta, que lo quite
+
+            //foreach (var jugador in Jugadores)
+            //{
+            //    if (!jugadoresactualizados.Contains(jugador))
+            //        Jugadores.Remove(jugador);
+            //}
+
+            Jugadores = new(jugadoresactualizados);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Jugadores)));
         }
 
         private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)

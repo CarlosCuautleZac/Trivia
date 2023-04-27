@@ -15,9 +15,10 @@ namespace TriviaAPP.Services
         public event Action<Jugador> Conectarse;
         public event Action Iniciar;
         Jugador jugador = new();
+        public event Action<List<Jugador>> ActualizarLista;
         
 
-        string url = "https://longaquarock52.conveyor.cloud/";
+        string url = "https://widetancar81.conveyor.cloud/";
         public List<Jugador> Jugadores = new List<Jugador>();
 
 
@@ -52,15 +53,17 @@ namespace TriviaAPP.Services
 
             });
 
+            //Cada vez que hay una nueva conexion
             connection.On<List<Jugador>>("NewConnection", (jugadores) =>
             {
-                var p = jugadores;
+                ActualizarLista?.Invoke(jugadores);
 
             });
 
+            //Cada vez que se desconecte una conexion
             connection.On<List<Jugador>>("DisconnectedConnection", (jugadores) =>
             {
-                var p = jugadores;
+                ActualizarLista?.Invoke(jugadores);
 
             });
 
