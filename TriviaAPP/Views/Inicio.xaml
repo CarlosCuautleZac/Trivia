@@ -15,16 +15,16 @@
 
         
         <Label HorizontalOptions="Center" FontSize="20" VerticalOptions="End" Margin="0,100,0,0" TextColor="Red" Text="No hay conexion a internet">
-            <!--<Label.Resources>
+            <Label.Resources>
                 <Style TargetType="Label">
                     <Setter Property="IsVisible" Value="False"></Setter>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Conection}" Value="False">
+                        <DataTrigger Binding="{Binding Conection}" Value="False" TargetType="Label">
                             <Setter Property="IsVisible" Value="True"></Setter>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Label.Resources>-->
+            </Label.Resources>
 
         </Label>
     </VerticalStackLayout>

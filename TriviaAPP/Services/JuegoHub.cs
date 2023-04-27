@@ -15,7 +15,7 @@ namespace TriviaAPP.Services
         public event Action<string> Conectarse;
         public event Action Iniciar;
 
-        string url = "https://fasttanpen59.conveyor.cloud/";
+        string url = "https://nextpurpleapple59.conveyor.cloud/";
 
         public JuegoHub()
         {
