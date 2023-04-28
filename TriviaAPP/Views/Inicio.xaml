@@ -4,29 +4,45 @@
              xmlns:vm="clr-namespace:TriviaAPP.ViewModels" x:DataType="vm:TriviaViewModel"
              x:Class="TriviaAPP.Views.Inicio"
              Title="Inicio" Shell.NavBarIsVisible="False">
-    <VerticalStackLayout Margin="10" VerticalOptions="FillAndExpand">
+
+    <ContentPage.Resources>
+        <Style x:Key="DisplayStyle" TargetType="StackLayout">
+            <Setter Property="BackgroundColor" Value="Green" />
+            <Setter Property="Margin" Value="10, 5, 10, 5" />
+            <Setter Property="HeightRequest" Value="50" />
+            <Setter Property="Padding" Value="10" />
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        </Style>
+    </ContentPage.Resources>
+    
+    <VerticalStackLayout Margin="10" VerticalOptions="StartAndExpand">
         <StackLayout Orientation="Horizontal">
-            <Label VerticalOptions="StartAndExpand" Margin="0,100,10,0" HorizontalOptions="Center">Usuario:</Label>
+            <Label VerticalOptions="StartAndExpand" Margin="0,100,10,0" HorizontalOptions="Center">Bienvenido,</Label>
             <Label Margin="0,100,0,0" Text="{Binding NombreUsuario}"></Label>
         </StackLayout>
 
 
 
-        <Label Margin="0,100,0,10" >Jugadores en la sala:</Label>
-        <CollectionView ItemsSource="{Binding Jugadores}">
+        <Label Margin="0,100,0,10" FontSize="Large" >Jugadores en la sala:</Label>
+        <CollectionView BackgroundColor="Transparent" ItemsSource="{Binding Jugadores}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Label Text="{Binding NombreUsuario}"></Label>
+                    <ViewCell>
+                        <StackLayout Style="{StaticResource DisplayStyle}">
+                            <Label Text="{Binding NombreUsuario}"></Label>
+                        </StackLayout>
+                    </ViewCell>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button IsEnabled="{Binding Conection}" Margin="0,200,0,0" Text="Iniciar"></Button>
+        <Button BackgroundColor="#D6262A" IsEnabled="{Binding Conection}" Margin="0,200,0,0" Text="Iniciar" CornerRadius="25" TextColor="White" FontSize="18"></Button>
 
       
         
         
-        <Label HorizontalOptions="Center" FontSize="20" VerticalOptions="End" Margin="0,100,0,0" TextColor="Red" Text="No hay conexion a internet">
+        <Label HorizontalOptions="Center" FontSize="20" VerticalOptions="End" Margin="0,100,0,0" TextColor="Red" Text="No hay conexion a internet o la conexión es muy débil">
             <Label.Resources>
                 <Style TargetType="Label">
                     <Setter Property="IsVisible" Value="False"></Setter>
