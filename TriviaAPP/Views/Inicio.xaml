@@ -15,7 +15,7 @@
             <Setter Property="HorizontalOptions" Value="FillAndExpand" />
         </Style>
     </ContentPage.Resources>
-    
+
     <VerticalStackLayout Margin="10" VerticalOptions="StartAndExpand">
         <StackLayout Orientation="Horizontal">
             <Label VerticalOptions="StartAndExpand" Margin="0,100,10,0" HorizontalOptions="Center">Bienvenido,</Label>
@@ -27,26 +27,27 @@
         <CollectionView ItemsSource="{Binding Jugadores}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Style="{StaticResource DisplayStyle}">
-                            <Label Text="{Binding NombreUsuario}"></Label>
-                        </StackLayout>
-                    </ViewCell>
+                    <StackLayout>
+                        <Label Text="{Binding NombreUsuario}"></Label>
+                    </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
 
-        <Label Text="{Binding contador}"></Label>
-        
+        <!--<Label Text="{Binding contador}"></Label>-->
+
+        <Label>Tiempo Restante</Label>
+        <Label Text="{Binding TiempoRestante}"></Label>
+
+        <Label>Ronda</Label>
+        <Label Text="{Binding Ronda}"></Label>
+
         <Button IsEnabled="{Binding Conection}" 
                 
                 Command="{Binding IniciarCommand}"
                 Margin="0,200,0,0" Text="Iniciar"></Button>
 
-      
-        
-        
         <Label HorizontalOptions="Center" FontSize="20" VerticalOptions="End" Margin="0,100,0,0" TextColor="Red" Text="No hay conexion a internet o la conexión es muy débil">
             <Label.Resources>
                 <Style TargetType="Label">
