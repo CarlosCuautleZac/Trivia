@@ -4,6 +4,11 @@
     {
         public int Id { get; set; }
         public string Pregunta { get; set; } = "";
-        public List<string> Respuestas { get; set; } = new();
+        public List<Respuesta> Respuestas { get; set; } = new();
+    }
+
+    public class Respuesta
+    {
+        public string Titulo { get; set; } = "";
     }
 }

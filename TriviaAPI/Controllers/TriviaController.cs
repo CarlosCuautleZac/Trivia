@@ -56,7 +56,7 @@ namespace TriviaAPI.Controllers
             var numeropregunta = random.Next(1, totalpreguntas + 1);
 
             var pregunta = repositoryP.GetbyId(numeropregunta);
-            var respuestas = repositoryR.GetAll().Where(x => x.Idpregunta == numeropregunta).Select(x => x.Respuesta).ToList();
+            var respuestas = repositoryR.GetAll().Where(x => x.Idpregunta == numeropregunta).Select(x => new Respuesta() { Titulo = x.Respuesta}).ToList();
 
             PreguntaDTO preguntaDTO = new PreguntaDTO()
             {
@@ -66,7 +66,8 @@ namespace TriviaAPI.Controllers
             };
 
             //a;adimos la respuesta buena
-            preguntaDTO.Respuestas.Add(pregunta.Respuesta);
+            Respuesta r = new() { Titulo = pregunta.Respuesta };
+            preguntaDTO.Respuestas.Add(r);
 
             //ahora cambiamos de orden las respuestas
             preguntaDTO.Respuestas = RevolverRespuestas(preguntaDTO.Respuestas).ToList();
@@ -80,7 +81,7 @@ namespace TriviaAPI.Controllers
 
 
 
-        IEnumerable<string> RevolverRespuestas(List<string> respuestas)
+        IEnumerable<Respuesta> RevolverRespuestas(List<Respuesta> respuestas)
         {
             Random rand = new Random();
 
