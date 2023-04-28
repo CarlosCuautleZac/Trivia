@@ -11,7 +11,7 @@ namespace TriviaAPP
         {
             InitializeComponent();
 
-            Routing.RegisterRoute("//Juego", typeof(JuegoView));
+            //Routing.RegisterRoute("//Juego", typeof(JuegoView));
 
             MainPage = new AppShell();
         }

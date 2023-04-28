@@ -19,7 +19,7 @@ namespace TriviaAPP.Services
         public event Action<PreguntaDTO> ActualizarPregunta;
         
 
-        string url = "https://smalltanapple76.conveyor.cloud/";
+        string url = "https://rightgoldpencil53.conveyor.cloud/";
         public List<Jugador> Jugadores = new List<Jugador>();
 
 
