@@ -37,11 +37,11 @@
 
         <!--<Label Text="{Binding contador}"></Label>-->
 
-        <Label>Tiempo Restante</Label>
+        <!--<Label>Tiempo Restante</Label>
         <Label Text="{Binding TiempoRestante}"></Label>
 
         <Label>Ronda</Label>
-        <Label Text="{Binding Ronda}"></Label>
+        <Label Text="{Binding Ronda}"></Label>-->
 
         <Button IsEnabled="{Binding Conection}" 
                 

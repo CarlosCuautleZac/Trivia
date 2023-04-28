@@ -27,6 +27,7 @@ namespace TriviaAPP.ViewModels
         #region comandos
 
         public Command IniciarCommand { get; set; }
+        public Command VolverAlInicioCommand { get; set; }
 
         #endregion
 
@@ -35,11 +36,12 @@ namespace TriviaAPP.ViewModels
 
         //Para el juego
         public PreguntaDTO Pregunta { get; set; }
+        public Respuesta Respuesta { get; set; }
         public ObservableCollection<Jugador> Jugadores { get; set; } = new();
 
         //Usuario
         public string NombreUsuario { get; set; } = "Espera";
-       
+        public bool EsHost { get; set; } = false;
 
         //Configuracion del juego
         public int contador { get; set; }
@@ -63,68 +65,68 @@ namespace TriviaAPP.ViewModels
             hub.ActualizarPregunta += Hub_ActualizarPregunta;
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
             IniciarCommand = new Command(IniciarJuego);
+            VolverAlInicioCommand = new Command(VolverAlInicio);
+        }
+
+        private async void VolverAlInicio()
+        {
+            await Shell.Current.GoToAsync("//Main");
         }
 
         //Metodos que hacen los botones
 
-       
+
         private async void IniciarJuego()
         {
-            await hub.IniciarJuego();
-            await hub.Jugar();
-            Timer = new Timer(async (state) =>
-            {
-
-                TiempoRestanteSiguientePregunta = TiempoRestante;
-                
-                Actualizar();
-
-                if (TiempoRestanteSiguientePregunta == 1)
-                {
-                    if (Ronda >= limiterondas)
-                        Timer.Dispose();
-                    else
-                    {
-                        await hub.Jugar();
-                    }
-
-                }
-              
-
-
-            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
-
+            EsHost= true;
+            await hub.Jugar();            
+            Actualizar();
+            await hub.IniciarJuego();                   
         }
 
 
         //Eventos
 
 
-        private async void Hub_Iniciar()
+        private void Hub_Iniciar()
         {
+            Ronda = 1;
+            TiempoRestante = 15;
+            Actualizar();
             MainThread.BeginInvokeOnMainThread(async () =>
             {
+                //Shell.Current.Navigation.RemovePage(Shell.Current.Navigation.NavigationStack[0]);
                 await Shell.Current.GoToAsync("//Juego");
             });
 
-            TimerCliente = new Timer((state) =>
+            TimerCliente = new Timer(async (state) =>
             {
                 TiempoRestante -= 1;
 
                 Actualizar();
 
-                if (TiempoRestante == 0)
+                if (TiempoRestante == 1)
                 {
+
+                    if (EsHost)
+                        await hub.Jugar();
+
                     //TiempoRestante = 15;
-                    Ronda += 1;
+                    
                     if (Ronda >= limiterondas)
                     {
                         TimerCliente.Dispose();
+                        MainThread.BeginInvokeOnMainThread(async () =>
+                        {
+                            await Shell.Current.GoToAsync("//FinDeJuego");
+                        });
                     }
                     else
                     {
                         TiempoRestante = 15;
                     }
+
+                    Ronda += 1;
                 }
 
 

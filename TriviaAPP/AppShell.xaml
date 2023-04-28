@@ -15,4 +15,11 @@
         <views:Inicio></views:Inicio>
     </ShellContent>
 
+    <ShellContent Route="Juego">
+        <views:JuegoView></views:JuegoView>
+    </ShellContent>
+
+    <ShellContent Route="FinDeJuego">
+        <views:FindDeJuego></views:FindDeJuego>
+    </ShellContent>
 </Shell>
