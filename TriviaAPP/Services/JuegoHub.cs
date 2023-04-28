@@ -18,7 +18,7 @@ namespace TriviaAPP.Services
         public event Action<List<Jugador>> ActualizarLista;
         
 
-        string url = "https://widetancar81.conveyor.cloud/";
+        string url = "https://widetanrock31.conveyor.cloud/";
         public List<Jugador> Jugadores = new List<Jugador>();
 
 

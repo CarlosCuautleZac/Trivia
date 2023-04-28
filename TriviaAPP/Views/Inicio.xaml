@@ -23,9 +23,8 @@
         </StackLayout>
 
 
-
-        <Label Margin="0,100,0,10" FontSize="Large" >Jugadores en la sala:</Label>
-        <CollectionView BackgroundColor="Transparent" ItemsSource="{Binding Jugadores}">
+        <Label Margin="0,100,0,10" >Jugadores en la sala:</Label>
+        <CollectionView ItemsSource="{Binding Jugadores}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -37,7 +36,13 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button BackgroundColor="#D6262A" IsEnabled="{Binding Conection}" Margin="0,200,0,0" Text="Iniciar" CornerRadius="25" TextColor="White" FontSize="18"></Button>
+
+        <Label Text="{Binding contador}"></Label>
+        
+        <Button IsEnabled="{Binding Conection}" 
+                
+                Command="{Binding IniciarCommand}"
+                Margin="0,200,0,0" Text="Iniciar"></Button>
 
       
         

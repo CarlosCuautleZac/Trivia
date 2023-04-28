@@ -19,10 +19,13 @@ namespace TriviaAPP.ViewModels
         #region objetos
         JuegoHub hub = new();
         Jugador Jugador = new Jugador();
+        Timer Timer;
         #endregion
 
 
         #region comandos
+
+        public Command IniciarCommand { get; set; }
 
         #endregion
 
@@ -34,6 +37,8 @@ namespace TriviaAPP.ViewModels
         public string NombreUsuario { get; set; } = "Espera";
 
         public bool Conection { get; set; } = Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+
+        public int contador { get; set; }
 
 
         //public bool Conection
@@ -55,6 +60,26 @@ namespace TriviaAPP.ViewModels
             hub.Iniciar += Hub_Iniciar;
             hub.ActualizarLista += Hub_ActualizarLista;
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+            IniciarCommand = new Command(IniciarJuego);
+        }
+
+        private void IniciarJuego()
+        {
+             Timer = new Timer((state) =>
+            {
+                contador += 1;
+                //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(contador)));
+                Actualizar();
+
+                if (contador == 3)
+                {
+                    Timer.Dispose();
+                    contador=0;
+                }
+
+
+            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+
         }
 
         private void Hub_ActualizarLista(List<Jugador> jugadoresactualizados)
@@ -92,6 +117,7 @@ namespace TriviaAPP.ViewModels
 
         private void Hub_Iniciar()
         {
+
         }
 
         private void Hub_Conectarse(Jugador jugador)
@@ -110,7 +136,7 @@ namespace TriviaAPP.ViewModels
         }
         public void Actualizar(string nombre = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(nombre)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombre));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
