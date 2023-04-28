@@ -19,31 +19,37 @@ namespace TriviaAPP.ViewModels
         #region objetos
         JuegoHub hub = new();
         Jugador Jugador = new Jugador();
+        Timer Timer; //Este timer es para que el host envie el metodo de jugar cada cierto tiempo
+        Timer TimerCliente; //Este timer es para darle a conocer el tiempo que tiene el cliente para responder
         #endregion
 
 
         #region comandos
+
+        public Command IniciarCommand { get; set; }
 
         #endregion
 
 
         #region propiedades
 
+        //Para el juego
+        public PreguntaDTO Pregunta { get; set; }
         public ObservableCollection<Jugador> Jugadores { get; set; } = new();
 
+        //Usuario
         public string NombreUsuario { get; set; } = "Espera";
+       
 
+        //Configuracion del juego
+        public int contador { get; set; }
+        public int Ronda { get; set; } = 0;
+        public int TiempoRestante { get; set; } = 15;
+
+        public int TiempoRestanteSiguientePregunta;
+        int limiterondas = 2;
         public bool Conection { get; set; } = Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
 
-
-        //public bool Conection
-        //{
-        //    get
-        //    {
-        //        Actualizar(nameof(Conection));
-        //        return Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
-        //    }
-        //}
         #endregion
 
         //Constructor
@@ -54,9 +60,82 @@ namespace TriviaAPP.ViewModels
             hub.Conectarse += Hub_Conectarse;
             hub.Iniciar += Hub_Iniciar;
             hub.ActualizarLista += Hub_ActualizarLista;
+            hub.ActualizarPregunta += Hub_ActualizarPregunta;
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
+            IniciarCommand = new Command(IniciarJuego);
         }
 
+        //Metodos que hacen los botones
+
+       
+        private async void IniciarJuego()
+        {
+            await hub.IniciarJuego();
+            await hub.Jugar();
+            Timer = new Timer(async (state) =>
+            {
+
+                TiempoRestanteSiguientePregunta = TiempoRestante;
+                
+                Actualizar();
+
+                if (TiempoRestanteSiguientePregunta == 1)
+                {
+                    if (Ronda >= limiterondas)
+                        Timer.Dispose();
+                    else
+                    {
+                        await hub.Jugar();
+                    }
+
+                }
+              
+
+
+            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+
+        }
+
+
+        //Eventos
+
+
+        private async void Hub_Iniciar()
+        {
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                await Shell.Current.GoToAsync("//Juego");
+            });
+
+            TimerCliente = new Timer((state) =>
+            {
+                TiempoRestante -= 1;
+
+                Actualizar();
+
+                if (TiempoRestante == 0)
+                {
+                    //TiempoRestante = 15;
+                    Ronda += 1;
+                    if (Ronda >= limiterondas)
+                    {
+                        TimerCliente.Dispose();
+                    }
+                    else
+                    {
+                        TiempoRestante = 15;
+                    }
+                }
+
+
+            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+        }
+
+        private void Hub_ActualizarPregunta(PreguntaDTO p)
+        {
+            Pregunta = p;
+            Actualizar();
+        }
         private void Hub_ActualizarLista(List<Jugador> jugadoresactualizados)
         {
             ////Verificiar
@@ -76,13 +155,14 @@ namespace TriviaAPP.ViewModels
             //}
 
             Jugadores = new(jugadoresactualizados);
+            Actualizar();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Jugadores)));
         }
 
         private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
         {
 
-            if(Connectivity.Current.NetworkAccess == NetworkAccess.Internet)
+            if (Connectivity.Current.NetworkAccess == NetworkAccess.Internet)
                 Conection = true;
             else
                 Conection = false;
@@ -90,9 +170,6 @@ namespace TriviaAPP.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Conection)));
         }
 
-        private void Hub_Iniciar()
-        {
-        }
 
         private void Hub_Conectarse(Jugador jugador)
         {
@@ -103,6 +180,8 @@ namespace TriviaAPP.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NombreUsuario)));
         }
 
+
+        //Al iniciar el juego
         private async void Iniciar()
         {
             if (Conection)
@@ -110,7 +189,7 @@ namespace TriviaAPP.ViewModels
         }
         public void Actualizar(string nombre = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(nombre)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nombre));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

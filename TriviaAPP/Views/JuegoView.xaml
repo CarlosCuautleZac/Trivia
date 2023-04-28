@@ -5,9 +5,20 @@
              x:Class="TriviaAPP.Views.JuegoView"
              Title="JuegoView">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <Label>Tiempo Restante</Label>
+        <Label Text="{Binding TiempoRestante}"></Label>
+
+        <Label Text="Ronda"></Label>
+        <Label Text="{Binding Ronda}"></Label>
+
+        <Label Text="{Binding Pregunta.Pregunta}"></Label>
+
+        <CollectionView ItemsSource="{Binding Pregunta.Respuestas}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Button></Button>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </VerticalStackLayout>
 </ContentPage>

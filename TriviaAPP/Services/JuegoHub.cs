@@ -16,6 +16,7 @@ namespace TriviaAPP.Services
         public event Action Iniciar;
         Jugador jugador = new();
         public event Action<List<Jugador>> ActualizarLista;
+        public event Action<PreguntaDTO> ActualizarPregunta;
         
 
         string url = "https://rightgoldpencil53.conveyor.cloud/";
@@ -45,11 +46,7 @@ namespace TriviaAPP.Services
 
             connection.On<PreguntaDTO>("recibirpregunta", (preguntaDTO) =>
             {
-                var p = preguntaDTO;
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    Application.Current.MainPage.DisplayAlert("uwu", "Juego Iniciado", "OK");
-                });
+                ActualizarPregunta?.Invoke(preguntaDTO);
 
             });
 
@@ -85,10 +82,15 @@ namespace TriviaAPP.Services
         }
         public async Task Jugar()
         {
-            var result = await client.GetAsync("api/jugar");
+            var result = await client.GetAsync("api/trivia/jugar");
             result.EnsureSuccessStatusCode();
         }
 
+        public async Task IniciarJuego()
+        {
+            var result = await client.GetAsync("api/trivia/iniciar");
+            result.EnsureSuccessStatusCode();
+        }
 
     }
 }
