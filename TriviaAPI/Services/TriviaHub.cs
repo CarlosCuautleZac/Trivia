@@ -3,7 +3,7 @@ using TriviaAPI.DTOs;
 
 namespace TriviaAPI.Services
 {
-    public class TriviaHub:Hub
+    public class TriviaHub : Hub
     {
         public static List<string> ActiveConnections { get; } = new List<string>();
         public static List<Jugador> Jugadores { get; } = new List<Jugador>();
@@ -16,7 +16,7 @@ namespace TriviaAPI.Services
             {
                 ConnectionId = connectionId,
                 NombreUsuario = Alias(),
-                Puntos=0
+                Puntos = 0
             };
 
             Jugadores.Add(jugador);
@@ -30,7 +30,7 @@ namespace TriviaAPI.Services
 
         public override async Task OnDisconnectedAsync(Exception exception)
         {
-            
+
             var connectionId = Context.ConnectionId;
 
             //buscamos la conexion
@@ -70,5 +70,27 @@ namespace TriviaAPI.Services
 
             return alias.Trim();
         }
+
+        public async void GuardarPuntaje(double puntos)
+        {
+            var connectionId = Context.ConnectionId;
+
+            var jugador = Jugadores.FirstOrDefault(x => x.ConnectionId == connectionId);
+
+            if (jugador != null)
+            {
+                var posicion = Jugadores.IndexOf(jugador);
+                Jugadores[posicion].Puntos += puntos;
+                await Clients.All.SendAsync("ActualizarLista", Jugadores);
+            }
+        }
+
+        public async void Iniciar()
+        {
+            Jugadores.ForEach(x=>x.Puntos=0);
+            await Clients.All.SendAsync("ActualizarLista", Jugadores);
+            await Clients.All.SendAsync("iniciar");
+        }
+
     }
 }

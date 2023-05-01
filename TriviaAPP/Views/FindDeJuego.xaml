@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:TriviaAPP.ViewModels" x:DataType="vm:TriviaViewModel"
+             xmlns:models="clr-namespace:TriviaAPP.Models"
              x:Class="TriviaAPP.Views.FindDeJuego"
              Title="FindDeJuego">
     <VerticalStackLayout>
@@ -9,6 +10,23 @@
             Text="Fin de juego!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+
+        <Label 
+            Text="Resumen!"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
+        <CollectionView ItemsSource="{Binding Jugadores}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Jugador">
+                    <StackLayout>
+                        <Label>Nombre de jugador</Label>
+                        <Label Text="{Binding NombreUsuario}"></Label>
+                        <Label Text="{Binding Puntos}"></Label>
+                    </StackLayout>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
 
         <Button Command="{Binding VolverAlInicioCommand}" Text="Regresar al inicio"></Button>
     </VerticalStackLayout>

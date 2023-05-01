@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TriviaAPP.Models;
+using static Microsoft.Maui.ApplicationModel.Permissions;
 
 namespace TriviaAPP.Services
 {
@@ -19,7 +20,7 @@ namespace TriviaAPP.Services
         public event Action<PreguntaDTO> ActualizarPregunta;
         
 
-        string url = "https://rightgoldpencil53.conveyor.cloud/";
+        string url = "https://nextgreenbox31.conveyor.cloud/";
         public List<Jugador> Jugadores = new List<Jugador>();
 
 
@@ -44,6 +45,14 @@ namespace TriviaAPP.Services
 
             });
 
+            //Datos del usuario cuando se conecta, esto es para su nombre de usurio
+            connection.On<Jugador>("Datos", (j) =>
+            {
+                jugador = j;
+                Conectarse?.Invoke(jugador);
+
+            });
+
             connection.On<PreguntaDTO>("recibirpregunta", (preguntaDTO) =>
             {
                 ActualizarPregunta?.Invoke(preguntaDTO);
@@ -64,11 +73,12 @@ namespace TriviaAPP.Services
 
             });
 
-            connection.On<Jugador>("Datos", (j) =>
-            {
-                jugador = j;
-                Conectarse?.Invoke(jugador);
+            
 
+            //Cada vez que se mande una puntuacion
+            connection.On<List<Jugador>>("ActualizarLista", (jugadores) =>
+            {
+                ActualizarLista?.Invoke(jugadores);
             });
 
         }
@@ -88,8 +98,14 @@ namespace TriviaAPP.Services
 
         public async Task IniciarJuego()
         {
-            var result = await client.GetAsync("api/trivia/iniciar");
-            result.EnsureSuccessStatusCode();
+            //var result = await client.GetAsync("api/trivia/iniciar");
+            //result.EnsureSuccessStatusCode();
+            await connection.InvokeAsync("Iniciar");
+        }
+
+        public async Task EnviarPuntos(double puntos)
+        {
+            await connection.InvokeAsync("GuardarPuntaje", puntos);
         }
 
     }

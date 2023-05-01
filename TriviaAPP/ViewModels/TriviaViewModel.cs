@@ -18,7 +18,6 @@ namespace TriviaAPP.ViewModels
     {
         #region objetos
         JuegoHub hub = new();
-        Jugador Jugador = new Jugador();
         Timer Timer; //Este timer es para que el host envie el metodo de jugar cada cierto tiempo
         Timer TimerCliente; //Este timer es para darle a conocer el tiempo que tiene el cliente para responder
         #endregion
@@ -28,6 +27,7 @@ namespace TriviaAPP.ViewModels
 
         public Command IniciarCommand { get; set; }
         public Command VolverAlInicioCommand { get; set; }
+        public Command ResponderCommand { get; set; }
 
         #endregion
 
@@ -38,15 +38,18 @@ namespace TriviaAPP.ViewModels
         public PreguntaDTO Pregunta { get; set; }
         public Respuesta Respuesta { get; set; }
         public ObservableCollection<Jugador> Jugadores { get; set; } = new();
+        public bool Respondido { get; set; }
 
         //Usuario
         public string NombreUsuario { get; set; } = "Espera";
         public bool EsHost { get; set; } = false;
+        Jugador Jugador = new Jugador();
 
         //Configuracion del juego
+        int tiempo = 30;
         public int contador { get; set; }
         public int Ronda { get; set; } = 0;
-        public int TiempoRestante { get; set; } = 15;
+        public int TiempoRestante { get; set; }
 
         public int TiempoRestanteSiguientePregunta;
         int limiterondas = 2;
@@ -66,10 +69,29 @@ namespace TriviaAPP.ViewModels
             Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
             IniciarCommand = new Command(IniciarJuego);
             VolverAlInicioCommand = new Command(VolverAlInicio);
+            ResponderCommand = new Command<string>(Reponder);
+            TiempoRestante = tiempo;
+        }
+
+        private async void Reponder(string respuesta)
+        {
+            //Aqui modificas para que lo que esta entre parentesis te de 10
+
+            if (respuesta == Pregunta.RespuestaCorrecta)
+            {
+                var puntos = Math.Round(((TiempoRestante / 3.0) * 100), 0);
+                await hub.EnviarPuntos(puntos);
+            }
+
+            Respondido = true;
+
+            Actualizar();
         }
 
         private async void VolverAlInicio()
         {
+            EsHost = false;
+            Actualizar();
             await Shell.Current.GoToAsync("//Main");
         }
 
@@ -78,10 +100,10 @@ namespace TriviaAPP.ViewModels
 
         private async void IniciarJuego()
         {
-            EsHost= true;
-            await hub.Jugar();            
+            EsHost = true;
+            await hub.Jugar();
             Actualizar();
-            await hub.IniciarJuego();                   
+            await hub.IniciarJuego();
         }
 
 
@@ -91,7 +113,7 @@ namespace TriviaAPP.ViewModels
         private void Hub_Iniciar()
         {
             Ronda = 1;
-            TiempoRestante = 15;
+            TiempoRestante = tiempo;
             Actualizar();
             MainThread.BeginInvokeOnMainThread(async () =>
             {
@@ -103,7 +125,8 @@ namespace TriviaAPP.ViewModels
             {
                 TiempoRestante -= 1;
 
-                Actualizar();
+                if (TiempoRestante > 0)
+                    Actualizar();
 
                 if (TiempoRestante == 1)
                 {
@@ -112,21 +135,26 @@ namespace TriviaAPP.ViewModels
                         await hub.Jugar();
 
                     //TiempoRestante = 15;
-                    
+
                     if (Ronda >= limiterondas)
                     {
                         TimerCliente.Dispose();
                         MainThread.BeginInvokeOnMainThread(async () =>
                         {
+                            Jugadores = new(Jugadores.OrderByDescending(x => x.Puntos));
+                            Actualizar();
                             await Shell.Current.GoToAsync("//FinDeJuego");
+
                         });
                     }
                     else
                     {
-                        TiempoRestante = 15;
+                        TiempoRestante = tiempo;
+                        Actualizar();
                     }
 
                     Ronda += 1;
+                    Actualizar();
                 }
 
 
@@ -135,6 +163,7 @@ namespace TriviaAPP.ViewModels
 
         private void Hub_ActualizarPregunta(PreguntaDTO p)
         {
+            Respondido = false;
             Pregunta = p;
             Actualizar();
         }
@@ -157,6 +186,15 @@ namespace TriviaAPP.ViewModels
             //}
 
             Jugadores = new(jugadoresactualizados);
+
+            //Le a;adimos lo puntos del jugador- esto solo se hara cuando esten jugando
+
+            if (Jugador.ConnectionId != "")
+            {
+                var puntos = Jugadores.FirstOrDefault(x => x.ConnectionId == Jugador.ConnectionId).Puntos;
+                Jugador.Puntos = puntos;
+            }
+
             Actualizar();
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Jugadores)));
         }

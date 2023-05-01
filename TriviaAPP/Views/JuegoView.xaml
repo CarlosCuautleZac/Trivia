@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:TriviaAPP.Models"
+             x:Name="juegoview"
              xmlns:vm="clr-namespace:TriviaAPP.ViewModels" x:DataType="vm:TriviaViewModel"
              x:Class="TriviaAPP.Views.JuegoView"
              Title="JuegoView" Shell.NavBarIsVisible="False">
@@ -17,7 +18,22 @@
         <CollectionView ItemsSource="{Binding Pregunta.Respuestas}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Button x:DataType="models:Respuesta" Text="{Binding Titulo}"></Button>
+                    <Button x:DataType="models:Respuesta" Text="{Binding Titulo}" Command="{Binding Source={x:Reference juegoview},
+                        Path= BindingContext.ResponderCommand}"
+                            CommandParameter="{Binding Titulo}">
+                        <Button.Resources>
+                            <Style TargetType="Button">
+                                <Setter Property="IsEnabled" Value="True"></Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Source={x:Reference juegoview},
+                        Path= BindingContext.Respondido}" Value="True" TargetType="Button">
+                                        <Setter Property="IsEnabled" Value="False"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Resources>
+
+                    </Button>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
