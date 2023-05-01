@@ -20,7 +20,7 @@ namespace TriviaAPP.Services
         public event Action<PreguntaDTO> ActualizarPregunta;
         
 
-        string url = "https://nextgreenbox31.conveyor.cloud/";
+        string url = "https://triviamario.sistemas19.com/";
         public List<Jugador> Jugadores = new List<Jugador>();
 
 

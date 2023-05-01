@@ -37,5 +37,7 @@
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
+        <Label Text="{Binding Mensaje}"></Label>
     </VerticalStackLayout>
 </ContentPage>

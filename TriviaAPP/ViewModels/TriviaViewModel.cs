@@ -39,6 +39,7 @@ namespace TriviaAPP.ViewModels
         public Respuesta Respuesta { get; set; }
         public ObservableCollection<Jugador> Jugadores { get; set; } = new();
         public bool Respondido { get; set; }
+        public string Mensaje { get; set; } = "";
 
         //Usuario
         public string NombreUsuario { get; set; } = "Espera";
@@ -123,10 +124,18 @@ namespace TriviaAPP.ViewModels
 
             TimerCliente = new Timer(async (state) =>
             {
-                TiempoRestante -= 1;
+                Mensaje = "";
 
                 if (TiempoRestante > 0)
-                    Actualizar();
+                {
+                    TiempoRestante -= 1;
+
+                }
+                else
+                {
+                    Mensaje = "Esperando Jugadores";
+                }
+                Actualizar();
 
                 if (TiempoRestante == 1)
                 {
