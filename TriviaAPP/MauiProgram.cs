@@ -1,5 +1,4 @@
-﻿using Java.Nio;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Plugin.Maui.Audio;
 using TriviaAPP.ViewModels;
 
@@ -23,7 +22,7 @@ namespace TriviaAPP
 #endif
 
             builder.Services.AddSingleton(AudioManager.Current);
-            builder.Services.AddTransient<TriviaViewModel>();
+            builder.Services.AddTransient<App>();
 
             return builder.Build();
         }

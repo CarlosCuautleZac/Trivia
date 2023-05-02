@@ -6,13 +6,12 @@ namespace TriviaAPP
 {
     public partial class App : Application
     {
-        private static readonly IAudioManager audioManager;
-        public static TriviaViewModel ViewModel { get; set; } = new(audioManager);
+        public static TriviaViewModel ViewModel { get; set; }
         public static bool Conection { get { return Connectivity.Current.NetworkAccess == NetworkAccess.Internet; } }
-        public App()
+        public App(IAudioManager audioManager)
         {
             InitializeComponent();
-
+            ViewModel = new(audioManager);
             //Routing.RegisterRoute("//Juego", typeof(JuegoView));
 
             MainPage = new AppShell();

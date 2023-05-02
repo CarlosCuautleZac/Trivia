@@ -76,19 +76,56 @@ namespace TriviaAPP.ViewModels
             ResponderCommand = new Command<string>(Reponder);
             TiempoRestante = tiempo;
             this.audioManager = audioManager;
+            PlaySound("inicio.wav");
+            PlayBackground();
+
         }
 
-
-        private async void PlaySound()
+        private async void PlayAnswerSound()
         {
-            var file = await FileSystem.OpenAppPackageFileAsync("gameover.wav");
+
+            Random r = new Random();
+            var random = r.Next(1, 8);
+            string sonidoelegido = random + ".wav";
+
+            var file = await FileSystem.OpenAppPackageFileAsync(sonidoelegido);
+            var AnswerSound = audioManager.CreatePlayer(file);
+            AnswerSound.Volume = .3;
+            AnswerSound.Play();
+        }
+
+        private async void PlayBackground()
+        {
+
+            Random r = new Random();
+            var random = r.Next(11, 18);
+            string sonidoelegido = random + ".wav";
+
+            var file = await FileSystem.OpenAppPackageFileAsync(sonidoelegido);
+            var background = audioManager.CreatePlayer(file);
+            background.Volume = .3;
+            background.Play();
+            background.PlaybackEnded += Background_PlaybackEnded;            
+        }
+
+        private void Background_PlaybackEnded(object sender, EventArgs e)
+        {
+            PlayBackground();
+        }
+
+        private async void PlaySound(string sound)
+        {
+            var file = await FileSystem.OpenAppPackageFileAsync(sound);
             var player = audioManager.CreatePlayer(file);
-            player.Play();
+            player.Volume = .1;
+            player.Play();    
         }
 
         private async void Reponder(string respuesta)
         {
             //Aqui modificas para que lo que esta entre parentesis te de 10
+
+            PlayAnswerSound();
 
             if (respuesta == Pregunta.RespuestaCorrecta)
             {
@@ -126,8 +163,10 @@ namespace TriviaAPP.ViewModels
 
         private async void Hub_Iniciar()
         {
-            var player = audioManager.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("gameover.wav"));
-            player.Play();
+            var file = await FileSystem.OpenAppPackageFileAsync("Start.wav");
+            var background = audioManager.CreatePlayer(file);
+            background.Volume = .1;
+            background.Play();
 
             Ronda = 1;
             TiempoRestante = tiempo;
@@ -153,6 +192,14 @@ namespace TriviaAPP.ViewModels
                 }
                 Actualizar();
 
+                if(TiempoRestante ==10 && Respondido == false)
+                {
+                    var file = await FileSystem.OpenAppPackageFileAsync("harryup.wav");
+                    var background = audioManager.CreatePlayer(file);
+                    background.Volume = .1;
+                    background.Play();
+                }
+
                 if (TiempoRestante == 1)
                 {
 
@@ -168,6 +215,11 @@ namespace TriviaAPP.ViewModels
                         {
                             Jugadores = new(Jugadores.OrderByDescending(x => x.Puntos));
                             Actualizar();
+
+                            if (Jugadores[0].ConnectionId == Jugador.ConnectionId)
+                                PlaySound("win.wav");
+                            else
+                                PlaySound("gameover.wav");
                             await Shell.Current.GoToAsync("//FinDeJuego");
 
                         });
