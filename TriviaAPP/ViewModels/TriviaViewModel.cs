@@ -21,6 +21,8 @@ namespace TriviaAPP.ViewModels
         JuegoHub hub = new();
         Timer Timer; //Este timer es para que el host envie el metodo de jugar cada cierto tiempo
         Timer TimerCliente; //Este timer es para darle a conocer el tiempo que tiene el cliente para responder
+        Thread hilosonido;
+
         #endregion
 
 
@@ -43,6 +45,7 @@ namespace TriviaAPP.ViewModels
         public string Mensaje { get; set; } = "";
         private readonly string fin = "Assets/end.mp3";
         private readonly IAudioManager audioManager;
+        private readonly IAudioManager audioManager2;
 
         //Usuario
         public string NombreUsuario { get; set; } = "Espera";
@@ -76,6 +79,7 @@ namespace TriviaAPP.ViewModels
             ResponderCommand = new Command<string>(Reponder);
             TiempoRestante = tiempo;
             this.audioManager = audioManager;
+            audioManager2 = audioManager;
             PlaySound("inicio.wav");
             PlayBackground();
 
@@ -83,7 +87,6 @@ namespace TriviaAPP.ViewModels
 
         private async void PlayAnswerSound()
         {
-
             Random r = new Random();
             var random = r.Next(1, 8);
             string sonidoelegido = random + ".wav";
@@ -101,11 +104,12 @@ namespace TriviaAPP.ViewModels
             var random = r.Next(11, 18);
             string sonidoelegido = random + ".wav";
 
+
             var file = await FileSystem.OpenAppPackageFileAsync(sonidoelegido);
-            var background = audioManager.CreatePlayer(file);
+            var background = audioManager2.CreatePlayer(file);
             background.Volume = .3;
             background.Play();
-            background.PlaybackEnded += Background_PlaybackEnded;            
+            background.PlaybackEnded += Background_PlaybackEnded;
         }
 
         private void Background_PlaybackEnded(object sender, EventArgs e)
@@ -118,7 +122,7 @@ namespace TriviaAPP.ViewModels
             var file = await FileSystem.OpenAppPackageFileAsync(sound);
             var player = audioManager.CreatePlayer(file);
             player.Volume = .1;
-            player.Play();    
+            player.Play();
         }
 
         private async void Reponder(string respuesta)
@@ -192,7 +196,7 @@ namespace TriviaAPP.ViewModels
                 }
                 Actualizar();
 
-                if(TiempoRestante ==10 && Respondido == false)
+                if (TiempoRestante == 10 && Respondido == false)
                 {
                     var file = await FileSystem.OpenAppPackageFileAsync("harryup.wav");
                     var background = audioManager.CreatePlayer(file);
