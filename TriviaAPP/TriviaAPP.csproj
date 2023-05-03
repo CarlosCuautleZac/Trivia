@@ -49,8 +49,31 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Raw\1.wav" />
+	  <None Remove="Resources\Raw\11.wav" />
+	  <None Remove="Resources\Raw\12.wav" />
+	  <None Remove="Resources\Raw\13.wav" />
+	  <None Remove="Resources\Raw\14.wav" />
+	  <None Remove="Resources\Raw\15.wav" />
+	  <None Remove="Resources\Raw\16.wav" />
+	  <None Remove="Resources\Raw\17.wav" />
+	  <None Remove="Resources\Raw\2.wav" />
+	  <None Remove="Resources\Raw\3.wav" />
+	  <None Remove="Resources\Raw\4.wav" />
+	  <None Remove="Resources\Raw\5.wav" />
+	  <None Remove="Resources\Raw\6.wav" />
+	  <None Remove="Resources\Raw\7.wav" />
+	  <None Remove="Resources\Raw\gameover.wav" />
+	  <None Remove="Resources\Raw\harryup.wav" />
+	  <None Remove="Resources\Raw\inicio.wav" />
+	  <None Remove="Resources\Raw\Start.wav" />
+	  <None Remove="Resources\Raw\win.wav" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+		<PackageReference Include="Plugin.Maui.Audio" Version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -63,6 +86,16 @@
 	  <MauiXaml Update="Views\JuegoView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Assets\Juego\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Assets\gameover.wav">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

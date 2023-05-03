@@ -11,6 +11,7 @@ using Microsoft.Maui.Controls;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using TriviaAPP.Models;
 using System.Collections.ObjectModel;
+using Plugin.Maui.Audio;
 
 namespace TriviaAPP.ViewModels
 {
@@ -40,6 +41,8 @@ namespace TriviaAPP.ViewModels
         public ObservableCollection<Jugador> Jugadores { get; set; } = new();
         public bool Respondido { get; set; }
         public string Mensaje { get; set; } = "";
+        private readonly string fin = "Assets/end.mp3";
+        private readonly IAudioManager audioManager;
 
         //Usuario
         public string NombreUsuario { get; set; } = "Espera";
@@ -60,7 +63,7 @@ namespace TriviaAPP.ViewModels
 
         //Constructor
 
-        public TriviaViewModel()
+        public TriviaViewModel(IAudioManager audioManager)
         {
             Iniciar();
             hub.Conectarse += Hub_Conectarse;
@@ -72,11 +75,57 @@ namespace TriviaAPP.ViewModels
             VolverAlInicioCommand = new Command(VolverAlInicio);
             ResponderCommand = new Command<string>(Reponder);
             TiempoRestante = tiempo;
+            this.audioManager = audioManager;
+            PlaySound("inicio.wav");
+            PlayBackground();
+
+        }
+
+        private async void PlayAnswerSound()
+        {
+
+            Random r = new Random();
+            var random = r.Next(1, 8);
+            string sonidoelegido = random + ".wav";
+
+            var file = await FileSystem.OpenAppPackageFileAsync(sonidoelegido);
+            var AnswerSound = audioManager.CreatePlayer(file);
+            AnswerSound.Volume = .3;
+            AnswerSound.Play();
+        }
+
+        private async void PlayBackground()
+        {
+
+            Random r = new Random();
+            var random = r.Next(11, 18);
+            string sonidoelegido = random + ".wav";
+
+            var file = await FileSystem.OpenAppPackageFileAsync(sonidoelegido);
+            var background = audioManager.CreatePlayer(file);
+            background.Volume = .3;
+            background.Play();
+            background.PlaybackEnded += Background_PlaybackEnded;            
+        }
+
+        private void Background_PlaybackEnded(object sender, EventArgs e)
+        {
+            PlayBackground();
+        }
+
+        private async void PlaySound(string sound)
+        {
+            var file = await FileSystem.OpenAppPackageFileAsync(sound);
+            var player = audioManager.CreatePlayer(file);
+            player.Volume = .1;
+            player.Play();    
         }
 
         private async void Reponder(string respuesta)
         {
             //Aqui modificas para que lo que esta entre parentesis te de 10
+
+            PlayAnswerSound();
 
             if (respuesta == Pregunta.RespuestaCorrecta)
             {
@@ -101,6 +150,7 @@ namespace TriviaAPP.ViewModels
 
         private async void IniciarJuego()
         {
+
             EsHost = true;
             await hub.Jugar();
             Actualizar();
@@ -111,8 +161,13 @@ namespace TriviaAPP.ViewModels
         //Eventos
 
 
-        private void Hub_Iniciar()
+        private async void Hub_Iniciar()
         {
+            var file = await FileSystem.OpenAppPackageFileAsync("Start.wav");
+            var background = audioManager.CreatePlayer(file);
+            background.Volume = .1;
+            background.Play();
+
             Ronda = 1;
             TiempoRestante = tiempo;
             Actualizar();
@@ -137,6 +192,14 @@ namespace TriviaAPP.ViewModels
                 }
                 Actualizar();
 
+                if(TiempoRestante ==10 && Respondido == false)
+                {
+                    var file = await FileSystem.OpenAppPackageFileAsync("harryup.wav");
+                    var background = audioManager.CreatePlayer(file);
+                    background.Volume = .1;
+                    background.Play();
+                }
+
                 if (TiempoRestante == 1)
                 {
 
@@ -152,6 +215,11 @@ namespace TriviaAPP.ViewModels
                         {
                             Jugadores = new(Jugadores.OrderByDescending(x => x.Puntos));
                             Actualizar();
+
+                            if (Jugadores[0].ConnectionId == Jugador.ConnectionId)
+                                PlaySound("win.wav");
+                            else
+                                PlaySound("gameover.wav");
                             await Shell.Current.GoToAsync("//FinDeJuego");
 
                         });

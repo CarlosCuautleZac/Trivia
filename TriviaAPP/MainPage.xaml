@@ -4,10 +4,6 @@
              xmlns:vm="clr-namespace:TriviaAPP.ViewModels"
              x:Class="TriviaAPP.MainPage">
 
-    <ContentPage.BindingContext>
-        <vm:TriviaViewModel></vm:TriviaViewModel>
-    </ContentPage.BindingContext>
-
     <ScrollView>
         <VerticalStackLayout
             Spacing="25"

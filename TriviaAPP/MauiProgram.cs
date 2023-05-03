@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using Plugin.Maui.Audio;
+using TriviaAPP.ViewModels;
 
 namespace TriviaAPP
 {
@@ -18,6 +20,9 @@ namespace TriviaAPP
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+
+            builder.Services.AddSingleton(AudioManager.Current);
+            builder.Services.AddTransient<App>();
 
             return builder.Build();
         }
