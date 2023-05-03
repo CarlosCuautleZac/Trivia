@@ -6,6 +6,12 @@
              xmlns:vm="clr-namespace:TriviaAPP.ViewModels" x:DataType="vm:TriviaViewModel"
              x:Class="TriviaAPP.Views.JuegoView"
              Title="JuegoView" Shell.NavBarIsVisible="False">
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+            <Setter Property="FontSize" Value="23"></Setter>
+        </Style>
+    </ContentPage.Resources>
     <VerticalStackLayout>
         <Label>Tiempo Restante</Label>
         <Label Text="{Binding TiempoRestante}"></Label>
@@ -18,7 +24,7 @@
         <CollectionView ItemsSource="{Binding Pregunta.Respuestas}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Button x:DataType="models:Respuesta" Text="{Binding Titulo}" Command="{Binding Source={x:Reference juegoview},
+                    <Button FontFamily="ComicSansMS" CornerRadius="30" WidthRequest="400" x:DataType="models:Respuesta" Text="{Binding Titulo}" Command="{Binding Source={x:Reference juegoview},
                         Path= BindingContext.ResponderCommand}"
                             CommandParameter="{Binding Titulo}">
                         <Button.Resources>

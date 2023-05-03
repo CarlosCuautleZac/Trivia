@@ -5,14 +5,26 @@
              xmlns:models="clr-namespace:TriviaAPP.Models"
              x:Class="TriviaAPP.Views.FindDeJuego"
              Title="FindDeJuego">
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+            <Setter Property="FontSize" Value="23"></Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="WidthRequest" Value="200"></Setter>
+            <Setter Property="CornerRadius" Value="30"></Setter>
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+            <Setter Property="FontSize" Value="23"></Setter>
+        </Style>
+    </ContentPage.Resources>
     <VerticalStackLayout>
         <Label 
-            Text="Fin de juego!"
+            Text="¡Fin de juego!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
         <Label 
-            Text="Resumen!"
+            Text="¡Resumen!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
@@ -20,7 +32,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Jugador">
                     <StackLayout>
-                        <Label>Nombre de jugador</Label>
+                        <Label>Nombre del jugador:</Label>
                         <Label Text="{Binding NombreUsuario}"></Label>
                         <Label Text="{Binding Puntos}"></Label>
                     </StackLayout>
@@ -28,6 +40,6 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button Command="{Binding VolverAlInicioCommand}" Text="Regresar al inicio"></Button>
+        <Button Clicked="btnAnim_Clicked" x:Name="btnAnim" Command="{Binding VolverAlInicioCommand}" Text="Regresar al inicio"></Button>
     </VerticalStackLayout>
 </ContentPage>

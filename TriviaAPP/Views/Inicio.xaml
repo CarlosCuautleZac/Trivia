@@ -1,18 +1,29 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:TriviaAPP.ViewModels" x:DataType="vm:TriviaViewModel"
+             xmlns:vm="clr-namespace:TriviaAPP.ViewModels" 
+             x:DataType="vm:TriviaViewModel"
              x:Class="TriviaAPP.Views.Inicio"
              Title="Inicio" Shell.NavBarIsVisible="False">
 
     <ContentPage.Resources>
         <Style x:Key="DisplayStyle" TargetType="StackLayout">
-            <Setter Property="BackgroundColor" Value="Green" />
+            <Setter Property="BackgroundColor" Value="LightGreen" />
             <Setter Property="Margin" Value="10, 5, 10, 5" />
             <Setter Property="HeightRequest" Value="50" />
             <Setter Property="Padding" Value="10" />
             <Setter Property="Orientation" Value="Horizontal" />
-            <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+            <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+        </Style>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+            <Setter Property="FontSize" Value="23"></Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="WidthRequest" Value="200"></Setter>
+            <Setter Property="CornerRadius" Value="30"></Setter>
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+            <Setter Property="FontSize" Value="23"></Setter>
         </Style>
     </ContentPage.Resources>
 
@@ -27,8 +38,13 @@
         <CollectionView ItemsSource="{Binding Jugadores}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout>
-                        <Label Text="{Binding NombreUsuario}"></Label>
+                    <StackLayout Style="{StaticResource DisplayStyle}">
+                        <Border>
+                            <HorizontalStackLayout>
+                                <Image Source="Resources/Images/hongo.png"></Image>
+                                <Label Margin="5" FontSize="17" Text="{Binding NombreUsuario}"></Label>
+                            </HorizontalStackLayout>
+                        </Border>
                     </StackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
@@ -43,10 +59,10 @@
         <Label>Ronda</Label>
         <Label Text="{Binding Ronda}"></Label>-->
 
-        <Button IsEnabled="{Binding Conection}" 
+        <Button x:Name="btnIniciar" Clicked="Button_Clicked" IsEnabled="{Binding Conection}" 
                 
                 Command="{Binding IniciarCommand}"
-                Margin="0,200,0,0" Text="Iniciar"></Button>
+                Margin="0,200,0,0" Text="Iniciar trivia"></Button>
 
         <Label HorizontalOptions="Center" FontSize="20" VerticalOptions="End" Margin="0,100,0,0" TextColor="Red" Text="No hay conexion a internet o la conexión es muy débil">
             <Label.Resources>

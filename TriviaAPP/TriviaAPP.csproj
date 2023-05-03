@@ -49,6 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\hongo.png" />
 	  <None Remove="Resources\Raw\1.wav" />
 	  <None Remove="Resources\Raw\11.wav" />
 	  <None Remove="Resources\Raw\12.wav" />
