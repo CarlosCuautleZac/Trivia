@@ -95,6 +95,12 @@ namespace TriviaAPP.ViewModels
             var AnswerSound = audioManager.CreatePlayer(file);
             AnswerSound.Volume = .3;
             AnswerSound.Play();
+            AnswerSound.PlaybackEnded += AnswerSound_PlaybackEnded;
+        }
+
+        private void AnswerSound_PlaybackEnded(object sender, EventArgs e)
+        {
+            PlayBackground();
         }
 
         private async void PlayBackground()
