@@ -4,16 +4,17 @@
              xmlns:vm="clr-namespace:TriviaAPP.ViewModels" 
              x:DataType="vm:TriviaViewModel"
              x:Class="TriviaAPP.Views.Inicio"
-             Title="Inicio" Shell.NavBarIsVisible="False">
+             Title="Inicio" Shell.NavBarIsVisible="False" BackgroundImageSource="Resources/Images/principal.png">
 
     <ContentPage.Resources>
         <Style x:Key="DisplayStyle" TargetType="StackLayout">
-            <Setter Property="BackgroundColor" Value="LightGreen" />
-            <Setter Property="Margin" Value="10, 5, 10, 5" />
+            <Setter Property="BackgroundColor" Value="Transparent" />
+            <Setter Property="Margin" Value="15,10" />
             <Setter Property="HeightRequest" Value="50" />
-            <Setter Property="Padding" Value="10" />
+            <Setter Property="Padding" Value="5" />
             <Setter Property="Orientation" Value="Horizontal" />
             <Setter Property="HorizontalOptions" Value="CenterAndExpand" />
+            <Setter Property="WidthRequest" Value="230"></Setter>
         </Style>
         <Style TargetType="Label">
             <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
@@ -28,24 +29,48 @@
     </ContentPage.Resources>
 
     <VerticalStackLayout Margin="10" VerticalOptions="StartAndExpand">
-        <StackLayout Orientation="Horizontal">
-            <Label VerticalOptions="StartAndExpand" Margin="0,100,10,0" HorizontalOptions="Center">Bienvenido,</Label>
+        <Image WidthRequest="250" Source="Resources/images/logosmb.png" Margin="0,0,0,0"></Image>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label FontSize="25" Grid.Row="0" VerticalOptions="StartAndExpand" Margin="0,10" HorizontalOptions="Center">Bienvenido a la trivia de Mario Bros</Label>
+            <Label VerticalOptions="StartAndExpand" Margin="0,15" HorizontalOptions="Center" Grid.Row="1">¡Déjame adivinar!, Tú eres...</Label>
+            <Label VerticalOptions="StartAndExpand" Margin="0" HorizontalOptions="Center" Grid.Row="2" Text="{Binding NombreUsuario}"></Label>
+            
+        </Grid>
+        <!--<StackLayout VerticalOptions="Center" Orientation="Horizontal">
+            <Label VerticalOptions="StartAndExpand" Margin="70,100,10,0" HorizontalOptions="Center">Bienvenido,</Label>
             <Label Margin="0,100,0,0" Text="{Binding NombreUsuario}"></Label>
-        </StackLayout>
+        </StackLayout>-->
 
 
-        <Label Margin="0,100,0,10" >Jugadores en la sala:</Label>
+        <Label Margin="0,10" >Jugadores en la sala:</Label>
         <CollectionView ItemsSource="{Binding Jugadores}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Style="{StaticResource DisplayStyle}">
-                        <Border>
-                            <HorizontalStackLayout>
-                                <Image Source="Resources/Images/hongo.png"></Image>
-                                <Label Margin="5" FontSize="17" Text="{Binding NombreUsuario}"></Label>
-                            </HorizontalStackLayout>
-                        </Border>
-                    </StackLayout>
+                    <Border WidthRequest="300" Background="Green">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="150"/>
+                        </Border.StrokeShape>
+                        <StackLayout Style="{StaticResource DisplayStyle}">
+                            <Border>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="150"/>
+                                </Border.StrokeShape>
+                                <HorizontalStackLayout Margin="0" WidthRequest="220">
+                                    <Image Source="Resources/Images/hongo.png"></Image>
+                                    <Label WidthRequest="240" Padding="9" FontSize="17" Text="{Binding NombreUsuario}"></Label>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </StackLayout>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

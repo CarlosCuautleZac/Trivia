@@ -13,18 +13,18 @@
         </Style>
     </ContentPage.Resources>
     <VerticalStackLayout>
-        <Label>Tiempo Restante</Label>
+        <Label>Tiempo Restante:</Label>
         <Label Text="{Binding TiempoRestante}"></Label>
 
-        <Label Text="Ronda"></Label>
+        <Label Text="Ronda numero:"></Label>
         <Label Text="{Binding Ronda}"></Label>
 
         <Label Text="{Binding Pregunta.Pregunta}"></Label>
 
-        <CollectionView ItemsSource="{Binding Pregunta.Respuestas}">
+        <CollectionView x:Name="CVdeResp" ItemsSource="{Binding Pregunta.Respuestas}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Button FontFamily="ComicSansMS" CornerRadius="30" WidthRequest="400" x:DataType="models:Respuesta" Text="{Binding Titulo}" Command="{Binding Source={x:Reference juegoview},
+                    <Button Margin="15" x:Name="btnRespuesta" Clicked="btnRespuesta_Clicked" FontFamily="ComicSansMS" CornerRadius="50" WidthRequest="400" x:DataType="models:Respuesta" Text="{Binding Titulo}" Command="{Binding Source={x:Reference juegoview},
                         Path= BindingContext.ResponderCommand}"
                             CommandParameter="{Binding Titulo}">
                         <Button.Resources>

@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:TriviaAPP.ViewModels" x:DataType="vm:TriviaViewModel"
              xmlns:models="clr-namespace:TriviaAPP.Models"
              x:Class="TriviaAPP.Views.FindDeJuego"
-             Title="FindDeJuego">
+             Title="GAME OVER">
     <ContentPage.Resources>
         <Style TargetType="Label">
             <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
@@ -22,24 +22,45 @@
             Text="¡Fin de juego!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
+        <Image Source="Resources/Images/gameov.png" WidthRequest="200" HeightRequest="150" Margin="10"></Image>
 
         <Label 
-            Text="¡Resumen!"
+            Text="Veamos los puntajes:"
             VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            HorizontalOptions="Center" Margin="10,0,10,5" />
 
+        <!--<CollectionView ItemsSource="{Binding Jugadores}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Jugador">
+                    <Border Background="black" >
+                        <StackLayout Margin="10">
+                            <Label Text="{Binding NombreUsuario}"></Label>
+                            <Label Text="{Binding Puntos}"></Label>
+                        </StackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>-->
         <CollectionView ItemsSource="{Binding Jugadores}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Jugador">
-                    <StackLayout>
-                        <Label>Nombre del jugador:</Label>
-                        <Label Text="{Binding NombreUsuario}"></Label>
-                        <Label Text="{Binding Puntos}"></Label>
-                    </StackLayout>
+                    <Border Margin="10,0" Background="black" >
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="{Binding NombreUsuario}"></Label>
+                            <Label Grid.Column="1" Text="{Binding Puntos}"></Label>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button Clicked="btnAnim_Clicked" x:Name="btnAnim" Command="{Binding VolverAlInicioCommand}" Text="Regresar al inicio"></Button>
+        <Button Margin="0,300,0,0" Clicked="btnAnim_Clicked" x:Name="btnAnim" Command="{Binding VolverAlInicioCommand}" Text="Regresar al inicio"></Button>
     </VerticalStackLayout>
 </ContentPage>
