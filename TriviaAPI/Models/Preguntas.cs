@@ -11,5 +11,7 @@ public partial class Preguntas
 
     public string Respuesta { get; set; } = null!;
 
+    public string? Imagen { get; set; }
+
     public virtual ICollection<Respuestaserroneas> Respuestaserroneas { get; set; } = new List<Respuestaserroneas>();
 }

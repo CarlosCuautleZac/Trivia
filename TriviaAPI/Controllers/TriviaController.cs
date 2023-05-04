@@ -63,7 +63,8 @@ namespace TriviaAPI.Controllers
                 Id = pregunta.Id,
                 Pregunta = pregunta.Pregunta,
                 RespuestaCorrecta = pregunta.Respuesta,
-                Respuestas = respuestas
+                Respuestas = respuestas,
+                Imagen = pregunta.Imagen
             };
 
             //a;adimos la respuesta buena

@@ -152,6 +152,7 @@ namespace TriviaAPP.ViewModels
         {
             EsHost = false;
             Actualizar();
+            PlayBackground();
             await Shell.Current.GoToAsync("//Main");
         }
 
@@ -165,6 +166,7 @@ namespace TriviaAPP.ViewModels
             await hub.Jugar();
             Actualizar();
             await hub.IniciarJuego();
+            PlayBackground();
         }
 
 
@@ -231,6 +233,7 @@ namespace TriviaAPP.ViewModels
                             else
                                 PlaySound("gameover.wav");
                             await Shell.Current.GoToAsync("//FinDeJuego");
+                            PlayBackground();
 
                         });
                     }
