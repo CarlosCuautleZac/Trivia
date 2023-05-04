@@ -4,7 +4,7 @@
              xmlns:vm="clr-namespace:TriviaAPP.ViewModels" x:DataType="vm:TriviaViewModel"
              xmlns:models="clr-namespace:TriviaAPP.Models"
              x:Class="TriviaAPP.Views.FindDeJuego"
-             Title="GAME OVER">
+             Title="GAME OVER" BackgroundImageSource="Resources/Images/marioover.png">
     <ContentPage.Resources>
         <Style TargetType="Label">
             <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
@@ -19,12 +19,14 @@
     </ContentPage.Resources>
     <VerticalStackLayout>
         <Label 
+            TextColor="White"
             Text="¡Fin de juego!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
         <Image Source="Resources/Images/gameov.png" WidthRequest="200" HeightRequest="150" Margin="10"></Image>
 
         <Label 
+            TextColor="White"
             Text="Veamos los puntajes:"
             VerticalOptions="Center" 
             HorizontalOptions="Center" Margin="10,0,10,5" />
@@ -53,14 +55,15 @@
                                 <ColumnDefinition Width="3*"></ColumnDefinition>
                                 <ColumnDefinition Width="*"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Text="{Binding NombreUsuario}"></Label>
-                            <Label Grid.Column="1" Text="{Binding Puntos}"></Label>
+                            <Label TextColor="White" Grid.Column="0" Text="{Binding NombreUsuario}"></Label>
+                            <Label TextColor="White" Grid.Column="1" Text="{Binding Puntos}"></Label>
                         </Grid>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button Margin="0,300,0,0" Clicked="btnAnim_Clicked" x:Name="btnAnim" Command="{Binding VolverAlInicioCommand}" Text="Regresar al inicio"></Button>
+        <Button BackgroundColor="White" Margin="0,300,0,0" Clicked="btnAnim_Clicked" x:Name="btnAnim" Command="{Binding VolverAlInicioCommand}" Text="Regresar al inicio">
+        </Button>
     </VerticalStackLayout>
 </ContentPage>

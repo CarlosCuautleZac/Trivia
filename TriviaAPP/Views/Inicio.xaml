@@ -24,11 +24,15 @@
             <Setter Property="WidthRequest" Value="200"></Setter>
             <Setter Property="CornerRadius" Value="30"></Setter>
             <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+            <Setter Property="TextColor" Value="Black"></Setter>
             <Setter Property="FontSize" Value="23"></Setter>
+            <Setter Property="Background" Value="white"></Setter>
+            <Setter Property="BorderColor" Value="Black"></Setter>
+            <Setter Property="BorderWidth" Value="4"></Setter>
         </Style>
     </ContentPage.Resources>
 
-    <VerticalStackLayout Margin="10" VerticalOptions="StartAndExpand">
+    <VerticalStackLayout Margin="10" VerticalOptions="StartAndExpand" Spacing="20">
         <Image WidthRequest="250" Source="Resources/images/logosmb.png" Margin="0,0,0,0"></Image>
         <Grid>
             <Grid.RowDefinitions>
@@ -84,10 +88,32 @@
         <Label>Ronda</Label>
         <Label Text="{Binding Ronda}"></Label>-->
 
-        <Button x:Name="btnIniciar" Clicked="Button_Clicked" IsEnabled="{Binding Conection}" 
+        <!--<Button x:Name="btnIniciar" Clicked="Button_Clicked" IsEnabled="{Binding Conection}" 
                 
                 Command="{Binding IniciarCommand}"
-                Margin="0,200,0,0" Text="Iniciar trivia"></Button>
+                Margin="0,200,0,0" Text="Iniciar trivia">
+        </Button>-->
+        <Grid IsEnabled="{Binding Conection}" 
+              x:Name="gridIniciar"
+              HorizontalOptions="CenterAndExpand"
+              ZIndex="30">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding IniciarCommand}" Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+            </Grid.GestureRecognizers>
+            <Path 
+                HorizontalOptions="Center"
+                Margin="0,0,0,0"            
+              Stroke="Green"
+              StrokeThickness="5"
+              Fill="Crimson"
+              
+              Data="M0,5 h5 v-5 h150 v5 h5 v30 h-5 v5 h-150 v-5 h-5 v-30 z"></Path>
+            <Label HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   Text="Iniciar Trivia"></Label>
+            
+        </Grid>
+       
 
         <Label HorizontalOptions="Center" FontSize="20" VerticalOptions="End" Margin="0,100,0,0" TextColor="Red" Text="No hay conexion a internet o la conexión es muy débil">
             <Label.Resources>
