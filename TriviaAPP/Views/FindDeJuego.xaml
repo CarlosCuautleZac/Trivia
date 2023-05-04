@@ -23,7 +23,7 @@
             Text="¡Fin de juego!"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
-        <Image Source="Resources/Images/gameov.png" WidthRequest="200" HeightRequest="150" Margin="10"></Image>
+        <Image Source="Resources/Images/over.png" WidthRequest="200" HeightRequest="150" Margin="10"></Image>
 
         <Label 
             TextColor="White"
@@ -63,7 +63,7 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button BackgroundColor="White" Margin="0,300,0,0" Clicked="btnAnim_Clicked" x:Name="btnAnim" Command="{Binding VolverAlInicioCommand}" Text="Regresar al inicio">
+        <Button BackgroundColor="Black" TextColor="White" Margin="0,300,0,0" Clicked="btnAnim_Clicked" x:Name="btnAnim" Command="{Binding VolverAlInicioCommand}" Text="Regresar al inicio">
         </Button>
     </VerticalStackLayout>
 </ContentPage>
