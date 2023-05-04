@@ -47,7 +47,7 @@
             <Label FontSize="25" Grid.Row="0" VerticalOptions="StartAndExpand" Margin="0,10" HorizontalOptions="Center">Bienvenido a la trivia de Mario Bros</Label>
             <Label VerticalOptions="StartAndExpand" Margin="0,15" HorizontalOptions="Center" Grid.Row="1">¡Déjame adivinar!, Tú eres...</Label>
             <Label VerticalOptions="StartAndExpand" Margin="0" HorizontalOptions="Center" Grid.Row="2" Text="{Binding NombreUsuario}"></Label>
-            
+
         </Grid>
         <!--<StackLayout VerticalOptions="Center" Orientation="Horizontal">
             <Label VerticalOptions="StartAndExpand" Margin="70,100,10,0" HorizontalOptions="Center">Bienvenido,</Label>
@@ -93,27 +93,34 @@
                 Command="{Binding IniciarCommand}"
                 Margin="0,200,0,0" Text="Iniciar trivia">
         </Button>-->
-        <Grid IsEnabled="{Binding Conection}" 
+        <Grid 
+              WidthRequest="200"
+            HeightRequest="55"
+              IsEnabled="{Binding Conection}" 
               x:Name="gridIniciar"
-              HorizontalOptions="CenterAndExpand"
+              HorizontalOptions="Center"
               ZIndex="30">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
             <Grid.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding IniciarCommand}" Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
             </Grid.GestureRecognizers>
-            <Path 
-                HorizontalOptions="Center"
-                Margin="0,0,0,0"            
-              Stroke="Green"
-              StrokeThickness="5"
-              Fill="Crimson"
-              
-              Data="M0,5 h5 v-5 h150 v5 h5 v30 h-5 v5 h-150 v-5 h-5 v-30 z"></Path>
+            <Path Stroke="Black"
+                  Aspect="Fill"
+                  Fill="#e6cc00"
+                  StrokeThickness="7"
+                  Data="M0,5 h5 v-5 h150 v5 h5 v30 h-5 v5 h-150 v-5 h-5 v-30 z">
+               
+            </Path>
             <Label HorizontalOptions="Center"
+                   TextColor="Black"
+                   FontSize="28"
                    VerticalOptions="Center"
                    Text="Iniciar Trivia"></Label>
-            
+
         </Grid>
-       
+
 
         <Label HorizontalOptions="Center" FontSize="20" VerticalOptions="End" Margin="0,100,0,0" TextColor="Red" Text="No hay conexion a internet o la conexión es muy débil">
             <Label.Resources>
