@@ -21,13 +21,15 @@ namespace TriviaAPI.Controllers
         Repository<Respuestaserroneas> repositoryR;
         Random random = new();
         public List<Jugador> Jugadores = new List<Jugador>();
+        string wwwrootpath = "";
 
-        public TriviaController(Sistem21TriviaContext context, IHubContext<TriviaHub> hub, TriviaHub _hub)
+        public TriviaController(Sistem21TriviaContext context, IHubContext<TriviaHub> hub, TriviaHub _hub, IWebHostEnvironment environment)
         {
             repositoryP = new(context);
             repositoryR = new(context);
             this.hub = hub;
             this._hub = _hub;
+            wwwrootpath = environment.WebRootPath;
         }
 
         [HttpGet("conectar")]
@@ -64,7 +66,7 @@ namespace TriviaAPI.Controllers
                 Pregunta = pregunta.Pregunta,
                 RespuestaCorrecta = pregunta.Respuesta,
                 Respuestas = respuestas,
-                Imagen = pregunta.Imagen
+                Imagen = GetImagen(pregunta.Id)
             };
 
             //a;adimos la respuesta buena
@@ -81,7 +83,14 @@ namespace TriviaAPI.Controllers
             return Ok(preguntaDTO);
         }
 
-
+        private string GetImagen(int id)
+        {
+            string ruta = $"{wwwrootpath}\\img";
+            string[] archivo = Directory.GetFiles(ruta);       
+            Byte[] bytes = System.IO.File.ReadAllBytes(archivo[0]);
+            String file = Convert.ToBase64String(bytes);
+            return file;
+        }
 
         IEnumerable<Respuesta> RevolverRespuestas(List<Respuesta> respuestas)
         {
