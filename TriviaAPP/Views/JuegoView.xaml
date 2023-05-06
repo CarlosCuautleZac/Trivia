@@ -11,13 +11,13 @@
             <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
             <Setter Property="FontSize" Value="23"></Setter>
             <Setter Property="TextColor" Value="DarkRed"></Setter>
-            <Setter Property="Margin" Value="0, 10, 0, 10"></Setter>
+            <Setter Property="Margin" Value="10, 0, 10, 5"></Setter>
         </Style>
     </ContentPage.Resources>
     <Grid>
         <Image Source="fondopreguntas" Aspect="AspectFill"></Image>
         <VerticalStackLayout>
-            <Label>Tiempo Restante:</Label>
+            <Label Margin="10">Tiempo Restante:</Label>
             <Label Text="{Binding TiempoRestante}"></Label>
 
             <Label Text="Ronda numero:"></Label>
