@@ -66,7 +66,7 @@ namespace TriviaAPI.Controllers
                 Pregunta = pregunta.Pregunta,
                 RespuestaCorrecta = pregunta.Respuesta,
                 Respuestas = respuestas,
-                Imagen = GetImagen(pregunta.Id)
+                Imagen = pregunta.Imagen
             };
 
             //a;adimos la respuesta buena

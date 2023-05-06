@@ -59,7 +59,7 @@ namespace TriviaAPP.ViewModels
         public int TiempoRestante { get; set; }
 
         public int TiempoRestanteSiguientePregunta;
-        int limiterondas = 2;
+        int limiterondas = 4;
         public bool Conection { get; set; } = Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
 
         #endregion
@@ -162,11 +162,14 @@ namespace TriviaAPP.ViewModels
         private async void IniciarJuego()
         {
 
-            EsHost = true;
-            await hub.Jugar();
-            Actualizar();
-            await hub.IniciarJuego();
-            PlayBackground();
+            if (!string.IsNullOrWhiteSpace(Jugador.NombreUsuario))
+            {
+                EsHost = true;
+                await hub.Jugar();
+                Actualizar();
+                await hub.IniciarJuego();
+                PlayBackground();
+            }
         }
 
 

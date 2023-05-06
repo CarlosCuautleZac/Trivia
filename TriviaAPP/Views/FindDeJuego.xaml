@@ -57,7 +57,7 @@
         <CollectionView ItemsSource="{Binding Jugadores}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Jugador">
-                    <Border Margin="10,0" Background="#222" Z>
+                    <Border Margin="10,0" Background="#222">
                         <Grid Margin="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"></RowDefinition>
