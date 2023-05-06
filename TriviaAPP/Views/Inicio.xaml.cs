@@ -8,6 +8,7 @@ public partial class Inicio : ContentPage
         BindingContext = App.ViewModel;
     }
 
+
     //private async void Button_Clicked(object sender, EventArgs e)
     //{
     //    var b1 = btnIniciar.FadeTo(0, 1000, Easing.Linear);

@@ -49,7 +49,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\fondopreguntas.jpg" />
 	  <None Remove="Resources\Images\gameov.png" />
+	  <None Remove="Resources\Images\gameover.png" />
 	  <None Remove="Resources\Images\hongo.png" />
 	  <None Remove="Resources\Images\logosmb.png" />
 	  <None Remove="Resources\Images\marioover.jpg" />

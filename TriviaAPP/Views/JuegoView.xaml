@@ -10,40 +10,111 @@
         <Style TargetType="Label">
             <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
             <Setter Property="FontSize" Value="23"></Setter>
+            <Setter Property="TextColor" Value="DarkRed"></Setter>
+            <Setter Property="Margin" Value="0, 10, 0, 10"></Setter>
         </Style>
     </ContentPage.Resources>
-    <VerticalStackLayout>
-        <Label>Tiempo Restante:</Label>
-        <Label Text="{Binding TiempoRestante}"></Label>
+    <Grid>
+        <Image Source="fondopreguntas" Aspect="AspectFill"></Image>
+        <VerticalStackLayout>
+            <Label>Tiempo Restante:</Label>
+            <Label Text="{Binding TiempoRestante}"></Label>
 
-        <Label Text="Ronda numero:"></Label>
-        <Label Text="{Binding Ronda}"></Label>
+            <Label Text="Ronda numero:"></Label>
+            <Label Text="{Binding Ronda}"></Label>
 
-        <Label Text="{Binding Pregunta.Pregunta}"></Label>
+            <Label Text="{Binding Pregunta.Pregunta}" FontAttributes="Bold" BackgroundColor="#a1aefd" HorizontalTextAlignment="Center"></Label>
 
-        <CollectionView x:Name="CVdeResp" ItemsSource="{Binding Pregunta.Respuestas}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Button Margin="15" x:Name="btnRespuesta" Clicked="btnRespuesta_Clicked" FontFamily="ComicSansMS" CornerRadius="50" WidthRequest="400" x:DataType="models:Respuesta" Text="{Binding Titulo}" Command="{Binding Source={x:Reference juegoview},
+            <Image Source="{Binding Pregunta.Imagen}"
+                   BackgroundColor="#a1aefd"
+               HeightRequest="200"></Image>
+
+            <CollectionView x:Name="CVdeResp" ItemsSource="{Binding Pregunta.Respuestas}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
+
+
+
+                        <Button Margin="10" x:Name="btnRespuesta" 
+                            Clicked="btnRespuesta_Clicked" 
+                            FontFamily="ComicSansMS" 
+                            CornerRadius="8" 
+                            WidthRequest="300"
+                            BackgroundColor="#e6cc00"
+                                BorderColor="Black"
+                                BorderWidth="5"
+                                TextColor="Black"
+                                FontAttributes="Bold"
+                            x:DataType="models:Respuesta" 
+                            Text="{Binding Titulo}" 
+                            Command="{Binding Source={x:Reference juegoview},
                         Path= BindingContext.ResponderCommand}"
                             CommandParameter="{Binding Titulo}">
-                        <Button.Resources>
-                            <Style TargetType="Button">
-                                <Setter Property="IsEnabled" Value="True"></Setter>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Source={x:Reference juegoview},
+                            <Button.Resources>
+                                <Style TargetType="Button">
+                                    <Setter Property="IsEnabled" Value="True"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Source={x:Reference juegoview},
                         Path= BindingContext.Respondido}" Value="True" TargetType="Button">
-                                        <Setter Property="IsEnabled" Value="False"></Setter>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Resources>
+                                            <Setter Property="IsEnabled" Value="False"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Resources>
 
-                    </Button>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                        </Button>
+                        
+                        
+                        <!--<Grid 
+              WidthRequest="200"
+                            x:DataType="models:Respuesta" 
+            HeightRequest="55"
+              x:Name="btnRespuesta" 
+              HorizontalOptions="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference juegoview}, Path= BindingContext.ResponderCommand}" CommandParameter="{Binding Titulo}" Tapped="TapGestureRecognizer_Tapped"></TapGestureRecognizer>
+                            </Grid.GestureRecognizers>
 
-        <Label Text="{Binding Mensaje}"></Label>
-    </VerticalStackLayout>
+                            <Grid.Resources>
+                                <Style TargetType="Grid">
+                                    <Setter Property="IsEnabled" Value="True"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Source={x:Reference juegoview},
+                        Path= BindingContext.Respondido}" Value="True" TargetType="Button">
+                                            <Setter Property="IsEnabled" Value="False"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Grid.Resources>
+                            
+                            <Path Stroke="Black"
+                  Aspect="Fill"
+                  Fill="#e6cc00"
+                  StrokeThickness="7"
+                  Data="M0,5 h5 v-5 h150 v5 h5 v30 h-5 v5 h-150 v-5 h-5 v-30 z">
+
+                            </Path>
+                            <Label HorizontalOptions="Center"
+                   TextColor="Black"
+                   FontSize="28"
+                   VerticalOptions="Center"
+                   Text="{Binding Titulo}"></Label>
+
+                        </Grid>-->
+
+
+
+
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="{Binding Mensaje}"></Label>
+        </VerticalStackLayout>
+    </Grid>
+
 </ContentPage>
