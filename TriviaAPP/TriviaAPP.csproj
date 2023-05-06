@@ -49,6 +49,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\fondopreguntas.jpg" />
+	  <None Remove="Resources\Images\gameov.png" />
+	  <None Remove="Resources\Images\gameover.png" />
+	  <None Remove="Resources\Images\hongo.png" />
+	  <None Remove="Resources\Images\logosmb.png" />
+	  <None Remove="Resources\Images\marioover.jpg" />
+	  <None Remove="Resources\Images\over.png" />
+	  <None Remove="Resources\Images\principal.png" />
 	  <None Remove="Resources\Raw\1.wav" />
 	  <None Remove="Resources\Raw\11.wav" />
 	  <None Remove="Resources\Raw\12.wav" />

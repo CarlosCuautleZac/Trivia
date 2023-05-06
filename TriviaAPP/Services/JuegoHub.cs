@@ -26,12 +26,17 @@ namespace TriviaAPP.Services
 
         public JuegoHub()
         {
+            
+
             client = new HttpClient()
             {
                 BaseAddress = new Uri(url)
             };
 
             connection = new HubConnectionBuilder().WithUrl($"{url}triviaHub").Build();
+
+
+            connection.Closed += Connection_Closed;
 
             //connection.On("Conectado", () =>
             //{
@@ -83,6 +88,10 @@ namespace TriviaAPP.Services
 
         }
 
+        private Task Connection_Closed(Exception arg)
+        {
+            return Task.CompletedTask;
+        }
 
         public async Task Conectar()
         {

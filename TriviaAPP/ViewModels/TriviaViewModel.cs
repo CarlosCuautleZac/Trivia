@@ -21,6 +21,8 @@ namespace TriviaAPP.ViewModels
         JuegoHub hub = new();
         Timer Timer; //Este timer es para que el host envie el metodo de jugar cada cierto tiempo
         Timer TimerCliente; //Este timer es para darle a conocer el tiempo que tiene el cliente para responder
+        Thread hilosonido;
+
         #endregion
 
 
@@ -43,6 +45,7 @@ namespace TriviaAPP.ViewModels
         public string Mensaje { get; set; } = "";
         private readonly string fin = "Assets/end.mp3";
         private readonly IAudioManager audioManager;
+        private readonly IAudioManager audioManager2;
 
         //Usuario
         public string NombreUsuario { get; set; } = "Espera";
@@ -56,7 +59,7 @@ namespace TriviaAPP.ViewModels
         public int TiempoRestante { get; set; }
 
         public int TiempoRestanteSiguientePregunta;
-        int limiterondas = 2;
+        int limiterondas = 4;
         public bool Conection { get; set; } = Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
 
         #endregion
@@ -76,6 +79,7 @@ namespace TriviaAPP.ViewModels
             ResponderCommand = new Command<string>(Reponder);
             TiempoRestante = tiempo;
             this.audioManager = audioManager;
+            audioManager2 = audioManager;
             PlaySound("inicio.wav");
             PlayBackground();
 
@@ -83,7 +87,6 @@ namespace TriviaAPP.ViewModels
 
         private async void PlayAnswerSound()
         {
-
             Random r = new Random();
             var random = r.Next(1, 8);
             string sonidoelegido = random + ".wav";
@@ -92,6 +95,12 @@ namespace TriviaAPP.ViewModels
             var AnswerSound = audioManager.CreatePlayer(file);
             AnswerSound.Volume = .3;
             AnswerSound.Play();
+            AnswerSound.PlaybackEnded += AnswerSound_PlaybackEnded;
+        }
+
+        private void AnswerSound_PlaybackEnded(object sender, EventArgs e)
+        {
+            PlayBackground();
         }
 
         private async void PlayBackground()
@@ -101,11 +110,12 @@ namespace TriviaAPP.ViewModels
             var random = r.Next(11, 18);
             string sonidoelegido = random + ".wav";
 
+
             var file = await FileSystem.OpenAppPackageFileAsync(sonidoelegido);
-            var background = audioManager.CreatePlayer(file);
+            var background = audioManager2.CreatePlayer(file);
             background.Volume = .3;
             background.Play();
-            background.PlaybackEnded += Background_PlaybackEnded;            
+            background.PlaybackEnded += Background_PlaybackEnded;
         }
 
         private void Background_PlaybackEnded(object sender, EventArgs e)
@@ -118,7 +128,7 @@ namespace TriviaAPP.ViewModels
             var file = await FileSystem.OpenAppPackageFileAsync(sound);
             var player = audioManager.CreatePlayer(file);
             player.Volume = .1;
-            player.Play();    
+            player.Play();
         }
 
         private async void Reponder(string respuesta)
@@ -127,7 +137,7 @@ namespace TriviaAPP.ViewModels
 
             PlayAnswerSound();
 
-            if (respuesta == Pregunta.RespuestaCorrecta)
+            if (respuesta == Pregunta.RespuestaCorrecta && Conection)
             {
                 var puntos = Math.Round(((TiempoRestante / 3.0) * 100), 0);
                 await hub.EnviarPuntos(puntos);
@@ -142,6 +152,7 @@ namespace TriviaAPP.ViewModels
         {
             EsHost = false;
             Actualizar();
+            PlayBackground();
             await Shell.Current.GoToAsync("//Main");
         }
 
@@ -151,10 +162,14 @@ namespace TriviaAPP.ViewModels
         private async void IniciarJuego()
         {
 
-            EsHost = true;
-            await hub.Jugar();
-            Actualizar();
-            await hub.IniciarJuego();
+            if (!string.IsNullOrWhiteSpace(Jugador.NombreUsuario))
+            {
+                EsHost = true;
+                await hub.Jugar();
+                Actualizar();
+                await hub.IniciarJuego();
+                PlayBackground();
+            }
         }
 
 
@@ -163,79 +178,89 @@ namespace TriviaAPP.ViewModels
 
         private async void Hub_Iniciar()
         {
-            var file = await FileSystem.OpenAppPackageFileAsync("Start.wav");
-            var background = audioManager.CreatePlayer(file);
-            background.Volume = .1;
-            background.Play();
-
-            Ronda = 1;
-            TiempoRestante = tiempo;
-            Actualizar();
-            MainThread.BeginInvokeOnMainThread(async () =>
+            try
             {
-                //Shell.Current.Navigation.RemovePage(Shell.Current.Navigation.NavigationStack[0]);
-                await Shell.Current.GoToAsync("//Juego");
-            });
 
-            TimerCliente = new Timer(async (state) =>
-            {
-                Mensaje = "";
 
-                if (TiempoRestante > 0)
-                {
-                    TiempoRestante -= 1;
+                var file = await FileSystem.OpenAppPackageFileAsync("Start.wav");
+                var background = audioManager.CreatePlayer(file);
+                background.Volume = .1;
+                background.Play();
 
-                }
-                else
-                {
-                    Mensaje = "Esperando Jugadores";
-                }
+                Ronda = 1;
+                TiempoRestante = tiempo;
                 Actualizar();
-
-                if(TiempoRestante ==10 && Respondido == false)
+                MainThread.BeginInvokeOnMainThread(async () =>
                 {
-                    var file = await FileSystem.OpenAppPackageFileAsync("harryup.wav");
-                    var background = audioManager.CreatePlayer(file);
-                    background.Volume = .1;
-                    background.Play();
-                }
+                    //Shell.Current.Navigation.RemovePage(Shell.Current.Navigation.NavigationStack[0]);
+                    await Shell.Current.GoToAsync("//Juego");
+                });
 
-                if (TiempoRestante == 1)
+                TimerCliente = new Timer(async (state) =>
                 {
+                    Mensaje = "";
 
-                    if (EsHost)
-                        await hub.Jugar();
-
-                    //TiempoRestante = 15;
-
-                    if (Ronda >= limiterondas)
+                    if (TiempoRestante > 0)
                     {
-                        TimerCliente.Dispose();
-                        MainThread.BeginInvokeOnMainThread(async () =>
-                        {
-                            Jugadores = new(Jugadores.OrderByDescending(x => x.Puntos));
-                            Actualizar();
+                        TiempoRestante -= 1;
 
-                            if (Jugadores[0].ConnectionId == Jugador.ConnectionId)
-                                PlaySound("win.wav");
-                            else
-                                PlaySound("gameover.wav");
-                            await Shell.Current.GoToAsync("//FinDeJuego");
-
-                        });
                     }
                     else
                     {
-                        TiempoRestante = tiempo;
+                        Mensaje = "Esperando Jugadores";
+                    }
+                    Actualizar();
+
+                    if (TiempoRestante == 10 && Respondido == false)
+                    {
+                        var file = await FileSystem.OpenAppPackageFileAsync("harryup.wav");
+                        var background = audioManager.CreatePlayer(file);
+                        background.Volume = .1;
+                        background.Play();
+                    }
+
+                    if (TiempoRestante == 1)
+                    {
+
+                        if (EsHost && Conection)
+                            await hub.Jugar();
+
+                        //TiempoRestante = 15;
+
+                        if (Ronda >= limiterondas)
+                        {
+                            TimerCliente.Dispose();
+                            MainThread.BeginInvokeOnMainThread(async () =>
+                            {
+                                Jugadores = new(Jugadores.OrderByDescending(x => x.Puntos));
+                                Actualizar();
+
+                                if (Jugadores[0].ConnectionId == Jugador.ConnectionId)
+                                    PlaySound("win.wav");
+                                else
+                                    PlaySound("gameover.wav");
+                                await Shell.Current.GoToAsync("//FinDeJuego");
+                                PlayBackground();
+
+                            });
+                        }
+                        else
+                        {
+                            TiempoRestante = tiempo;
+                            Actualizar();
+                        }
+
+                        Ronda += 1;
                         Actualizar();
                     }
 
-                    Ronda += 1;
-                    Actualizar();
-                }
 
-
-            }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+                }, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+            }
+            catch (Exception ex)
+            {
+               await App.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+            }
         }
 
         private void Hub_ActualizarPregunta(PreguntaDTO p)

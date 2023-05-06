@@ -22,7 +22,7 @@ namespace TriviaAPP
 #endif
 
             builder.Services.AddSingleton(AudioManager.Current);
-            builder.Services.AddTransient<App>();
+            builder.Services.AddSingleton<App>();
 
             return builder.Build();
         }

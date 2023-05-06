@@ -4,30 +4,81 @@
              xmlns:vm="clr-namespace:TriviaAPP.ViewModels" x:DataType="vm:TriviaViewModel"
              xmlns:models="clr-namespace:TriviaAPP.Models"
              x:Class="TriviaAPP.Views.FindDeJuego"
-             Title="FindDeJuego">
-    <VerticalStackLayout>
-        <Label 
-            Text="Fin de juego!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             Title="GAME OVER" 
+             BackgroundColor="#222"
+             Shell.NavBarIsVisible="False">
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+            <Setter Property="FontSize" Value="22"></Setter>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="WidthRequest" Value="260"></Setter>
+            <Setter Property="FontFamily" Value="Comic Sans MS"></Setter>
+            <Setter Property="FontSize" Value="23"></Setter>
+        </Style>
+    </ContentPage.Resources>
+    <Grid>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+         <VerticalStackLayout Margin="0, 0, 0, 0" HorizontalOptions="Center"
+                              Spacing="10">
+        <Label  FontAttributes="Bold"
+                TextColor="White"
+                Text="¡Game Over!"
+                FontSize="45"
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand" />
+
+        <Image Source="gameover"  HeightRequest="250" Margin="0, 20, 0, 20"></Image>
 
         <Label 
-            Text="Resumen!"
+            TextColor="White"
+            Text="Veamos los puntajes:"
             VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+            HorizontalOptions="Center" Margin="10,0,10,20" />
 
+        <!--<CollectionView ItemsSource="{Binding Jugadores}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Jugador">
+                    <Border Background="black" >
+                        <StackLayout Margin="10">
+                            <Label Text="{Binding NombreUsuario}"></Label>
+                            <Label Text="{Binding Puntos}"></Label>
+                        </StackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>-->
         <CollectionView ItemsSource="{Binding Jugadores}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Jugador">
-                    <StackLayout>
-                        <Label>Nombre de jugador</Label>
-                        <Label Text="{Binding NombreUsuario}"></Label>
-                        <Label Text="{Binding Puntos}"></Label>
-                    </StackLayout>
+                    <Border Margin="10,0" Background="#222">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"></RowDefinition>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="3*"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Label TextColor="White" Grid.Column="0" Text="{Binding NombreUsuario}" TextTransform="Uppercase"></Label>
+                            <Label TextColor="White" Grid.Column="1" Text="{Binding Puntos}"></Label>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button Command="{Binding VolverAlInicioCommand}" Text="Regresar al inicio"></Button>
+       
     </VerticalStackLayout>
+
+        <Button BackgroundColor="#222" Grid.Row="1" TextColor="CornflowerBlue" FontAttributes="Bold" BorderColor="CornflowerBlue" BorderWidth="5" CornerRadius="3" Margin="0,00,0,20" Clicked="btnAnim_Clicked" x:Name="btnAnim" Command="{Binding VolverAlInicioCommand}" Text="Regresar al inicio">
+        </Button>
+    </Grid>
+   
 </ContentPage>
